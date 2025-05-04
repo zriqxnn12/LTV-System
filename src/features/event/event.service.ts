@@ -6,6 +6,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { Event } from './entities/event.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
+import { SharpHelper } from 'src/cores/helpers/sharp.helper';
 
 @Injectable()
 export class EventService {
@@ -16,17 +17,30 @@ export class EventService {
     private eventModel: typeof Event,
   ) {}
 
-  async create(createEventDto: CreateEventDto) {
+  async create(createEventDto: CreateEventDto, file: Express.Multer.File) {
+    if (!file) {
+      return this.response.fail('image is required', 400);
+    }
     const transaction = await this.sequelize.transaction();
     try {
+      const sharpHelper = new SharpHelper();
+      const uploadImage = await sharpHelper.resizeAndUpload(
+        file,
+        this.eventModel.imageDimension.eventImg,
+      );
+
       const event = await this.eventModel.create(
-        { ...createEventDto },
+        {
+          ...createEventDto,
+          file_path: uploadImage.file_path,
+        },
         { transaction },
       );
       await transaction.commit();
       return this.response.success(event, 201, 'Successfully create event');
     } catch (error) {
       await transaction.rollback();
+      console.error('event error:', error);
       return this.response.fail('Failed to create event', 400);
     }
   }

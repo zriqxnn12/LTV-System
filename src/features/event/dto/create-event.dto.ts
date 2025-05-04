@@ -1,7 +1,7 @@
 export class CreateEventDto {
   title: string;
-  file_path: string;
   address: string;
+  file_path: string;
   type_name: string;
   date: string;
   quota: number;
@@ -9,4 +9,5 @@ export class CreateEventDto {
   fee: number;
   start_time: string;
   end_time: string;
+  description: string;
 }

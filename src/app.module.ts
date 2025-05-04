@@ -14,6 +14,7 @@ import { UserModule } from './features/user/user.module';
 import { InstrumentModule } from './features/instrument/instrument.module';
 import { MusicGenreModule } from './features/music-genre/music-genre.module';
 import { BranchModule } from './features/branch/branch.module';
+import { EventModule } from './features/event/event.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { BranchModule } from './features/branch/branch.module';
     InstrumentModule,
     MusicGenreModule,
     BranchModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],

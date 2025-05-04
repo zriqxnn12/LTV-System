@@ -1,4 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { ResizeOption } from 'src/cores/helpers/sharp.helper';
 
 @Table({
   timestamps: true,
@@ -39,4 +40,25 @@ export class Event extends Model {
 
   @Column({ type: DataType.TIME, allowNull: false })
   end_time: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  description: string;
+
+  static imageDimension: { eventImg: ResizeOption } = {
+    eventImg: {
+      dimensions: [
+        {
+          width: 500,
+          fit: 'inside',
+          prefix: '500',
+        },
+        {
+          width: 1200,
+          fit: 'inside',
+          prefix: '1200',
+        },
+      ],
+      path: 'event/images',
+    },
+  };
 }

@@ -7,18 +7,29 @@ import {
   Param,
   Delete,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { eventIdParamSchema } from './validations/params/event-id.param';
+import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
+import { createEventSchema } from './validations/requests/create-event.request';
 
 @Controller()
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
-    return this.eventService.create(createEventDto);
+  @UseInterceptors(FileInterceptor('file_path'))
+  create(
+    @Body() createEventDto: CreateEventDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.eventService.create(createEventDto, file);
   }
 
   @Get()
@@ -27,17 +38,25 @@ export class EventController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,
+  ) {
     return this.eventService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+  update(
+    @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,
+    @Body(new JoiValidationPipe(createEventSchema))
+    updateEventDto: UpdateEventDto,
+  ) {
     return this.eventService.update(+id, updateEventDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,
+  ) {
     return this.eventService.remove(+id);
   }
 }
