@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
 import { userIdParamSchema } from './validations/params/user-id.param';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { createUserSchema } from './validations/requests/create-user.request';
 

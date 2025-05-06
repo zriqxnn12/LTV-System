@@ -9,6 +9,7 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -18,11 +19,13 @@ import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validatio
 import { eventIdParamSchema } from './validations/params/event-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { createEventSchema } from './validations/requests/create-event.request';
+import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 
 @Controller()
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file_path'))
   create(
@@ -32,11 +35,13 @@ export class EventController {
     return this.eventService.create(createEventDto, file);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() query) {
     return this.eventService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(
     @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,
@@ -44,6 +49,7 @@ export class EventController {
     return this.eventService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,
@@ -53,6 +59,7 @@ export class EventController {
     return this.eventService.update(+id, updateEventDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(
     @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,

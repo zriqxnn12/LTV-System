@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { MusicGenreService } from './music-genre.service';
 import { CreateMusicGenreDto } from './dto/create-music-genre.dto';
@@ -15,21 +16,25 @@ import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validatio
 import { musicGenreIdParamSchema } from './validations/params/music-genre-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { createMusicGenreSchema } from './validations/requests/create-music-genre.request';
+import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 
 @Controller()
 export class MusicGenreController {
   constructor(private readonly musicGenreService: MusicGenreService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createMusicGenreDto: CreateMusicGenreDto) {
     return this.musicGenreService.create(createMusicGenreDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() query) {
     return this.musicGenreService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(
     @Param('id', new JoiValidationParamPipe(musicGenreIdParamSchema))
@@ -38,6 +43,7 @@ export class MusicGenreController {
     return this.musicGenreService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', new JoiValidationParamPipe(musicGenreIdParamSchema))
@@ -48,6 +54,7 @@ export class MusicGenreController {
     return this.musicGenreService.update(+id, updateMusicGenreDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(
     @Param('id', new JoiValidationParamPipe(musicGenreIdParamSchema))

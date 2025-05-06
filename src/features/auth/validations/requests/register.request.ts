@@ -58,4 +58,6 @@ export const registerSchema = Joi.object({
       return value;
     }),
   password: Joi.string().min(8),
+  phone_no: Joi.string().optional(),
+  address: Joi.string().optional(),
 }).options({ abortEarly: false });
