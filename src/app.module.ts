@@ -8,13 +8,13 @@ import routerConfig from './cores/configs/router.config';
 import { sequelizeConfigAsync } from './cores/configs/sequelize.config';
 import { NotificationListener } from './cores/event-emitter/notification.listener';
 import { ResponseModule } from './cores/modules/response/response.module';
-import { AuthModule } from './features/auth/auth.module';
-import { NotificationModule } from './features/notification/public/notification.module';
-import { UserModule } from './features/user/user.module';
-import { InstrumentModule } from './features/instrument/instrument.module';
-import { MusicGenreModule } from './features/music-genre/music-genre.module';
-import { BranchModule } from './features/branch/branch.module';
-import { EventModule } from './features/event/event.module';
+import { AuthModule } from './features/admin/auth/auth.module';
+import { UserModule } from './features/admin/user/user.module';
+import { NotificationModule } from './features/admin/notification/public/notification.module';
+import { InstrumentModule } from './features/admin/instrument/instrument.module';
+import { MusicGenreModule } from './features/admin/music-genre/music-genre.module';
+import { BranchModule } from './features/admin/branch/branch.module';
+import { EventModule } from './features/admin/event/event.module';
 
 @Module({
   imports: [

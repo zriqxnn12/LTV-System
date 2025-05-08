@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
-import { CreateUserDto } from 'src/features/auth/dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
+import { CreateUserDto } from '../auth/dto/create-user.dto';
 
 @Injectable()
 export class UserService {

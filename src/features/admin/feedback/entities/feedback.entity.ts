@@ -5,7 +5,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from 'src/features/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Table({
   timestamps: true,

@@ -5,8 +5,8 @@ import * as bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
-import { CreateUserDto } from 'src/features/auth/dto/create-user.dto';
 import { User } from '../user/entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class AuthService {

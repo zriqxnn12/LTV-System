@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { User } from 'src/features/user/entities/user.entity';
+import { User } from 'src/features/admin/user/entities/user.entity';
 
 export const registerSchema = Joi.object({
   name: Joi.string().required(),
