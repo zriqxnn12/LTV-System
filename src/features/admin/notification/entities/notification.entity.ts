@@ -6,7 +6,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { User } from '../../user/entities/user.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 @Table({
   tableName: 'notifications',

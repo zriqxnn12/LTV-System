@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateInstrumentDto } from './dto/create-instrument.dto';
-import { UpdateInstrumentDto } from './dto/update-instrument.dto';
+import { CreateInstrumentDto } from '../../../models/instruments/dto/create-instrument.dto';
+import { UpdateInstrumentDto } from '../../../models/instruments/dto/update-instrument.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
-import { Instrument } from './entities/instrument.entity';
+import { Instrument } from '../../../models/instruments/entities/instrument.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 
 @Injectable()

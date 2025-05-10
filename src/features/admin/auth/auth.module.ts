@@ -5,9 +5,9 @@ import { PassportModule } from '@nestjs/passport';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { JwtStrategy } from 'src/cores/strategies/jwt.strategy';
 import { LocalStrategy } from 'src/cores/strategies/local.strategy';
-import { User } from '../user/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { User } from 'src/models/users/entities/user.entity';
 
 @Module({
   imports: [

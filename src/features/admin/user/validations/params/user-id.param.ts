@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { User } from '../../entities/user.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 export const userIdParamSchema = Joi.number()
   .required()

@@ -1,20 +1,20 @@
 import * as Joi from 'joi';
-import { Instrument } from '../../../../../models/instruments/entities/instrument.entity';
+import { Classroom } from '../../../../../models/classrooms/entities/classroom.entity';
 
-export const instrumentIdParamSchema = Joi.number()
+export const classroomIdParamSchema = Joi.number()
   .required()
   .external(async (value) => {
-    const instrument = await Instrument.findOne({
+    const classroom = await Classroom.findOne({
       where: { id: value },
     });
-    if (!instrument) {
+    if (!classroom) {
       throw new Joi.ValidationError(
-        'any.invalid-instrument-id',
+        'any.invalid-classroom-id',
         [
           {
-            message: 'instrument not found',
+            message: 'classroom not found',
             path: ['id'],
-            type: 'any.invalid-instrument-id',
+            type: 'any.invalid-classroom-id',
             context: {
               key: 'id',
               label: 'id',

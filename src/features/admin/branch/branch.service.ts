@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBranchDto } from './dto/create-branch.dto';
-import { UpdateBranchDto } from './dto/update-branch.dto';
+import { CreateBranchDto } from '../../../models/branches/dto/create-branch.dto';
+import { UpdateBranchDto } from '../../../models/branches/dto/update-branch.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
-import { Branch } from './entities/branch.entity';
+import { Branch } from '../../../models/branches/entities/branch.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 
 @Injectable()

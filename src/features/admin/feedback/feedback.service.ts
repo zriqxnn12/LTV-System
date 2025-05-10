@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { CreateFeedbackDto } from '../../../models/feedbacks/dto/create-feedback.dto';
+import { UpdateFeedbackDto } from '../../../models/feedbacks/dto/update-feedback.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
-import { Feedback } from './entities/feedback.entity';
+import { Feedback } from '../../../models/feedbacks/entities/feedback.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 
 @Injectable()

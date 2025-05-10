@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Notification } from '../entities/notification.entity';
-import { User } from '../../user/entities/user.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 @Injectable()
 export class NotificationService {

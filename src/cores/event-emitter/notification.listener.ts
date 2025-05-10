@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Sequelize } from 'sequelize-typescript';
 import { Notification } from 'src/features/admin/notification/entities/notification.entity';
-import { User } from 'src/features/admin/user/entities/user.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 @Injectable()
 export class NotificationListener {

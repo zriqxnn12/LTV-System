@@ -1,4 +1,4 @@
-import { User } from 'src/features/admin/user/entities/user.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 export const forgotPasswordMailHtml = (user: User, url: string) => {
   return `

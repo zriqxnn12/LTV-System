@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMusicGenreDto } from './dto/create-music-genre.dto';
-import { UpdateMusicGenreDto } from './dto/update-music-genre.dto';
+import { CreateMusicGenreDto } from '../../../models/music-genres/dto/create-music-genre.dto';
+import { UpdateMusicGenreDto } from '../../../models/music-genres/dto/update-music-genre.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';

@@ -8,10 +8,11 @@ import {
   Delete,
   Query,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { MusicGenreService } from './music-genre.service';
-import { CreateMusicGenreDto } from './dto/create-music-genre.dto';
-import { UpdateMusicGenreDto } from './dto/update-music-genre.dto';
+import { CreateMusicGenreDto } from '../../../models/music-genres/dto/create-music-genre.dto';
+import { UpdateMusicGenreDto } from '../../../models/music-genres/dto/update-music-genre.dto';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
 import { musicGenreIdParamSchema } from './validations/params/music-genre-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
@@ -44,7 +45,7 @@ export class MusicGenreController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id', new JoiValidationParamPipe(musicGenreIdParamSchema))
     id: number,

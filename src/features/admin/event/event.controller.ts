@@ -10,10 +10,11 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { EventService } from './event.service';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+import { CreateEventDto } from '../../../models/events/dto/create-event.dto';
+import { UpdateEventDto } from '../../../models/events/dto/update-event.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
 import { eventIdParamSchema } from './validations/params/event-id.param';
@@ -50,7 +51,7 @@ export class EventController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id', new JoiValidationParamPipe(eventIdParamSchema)) id: number,
     @Body(new JoiValidationPipe(createEventSchema))

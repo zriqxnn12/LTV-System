@@ -1,6 +1,7 @@
 import { RouterModule } from '@nestjs/core';
 import { AuthModule } from 'src/features/admin/auth/auth.module';
 import { BranchModule } from 'src/features/admin/branch/branch.module';
+import { ClassroomModule } from 'src/features/admin/classroom/classroom.module';
 import { EventModule } from 'src/features/admin/event/event.module';
 import { InstrumentModule } from 'src/features/admin/instrument/instrument.module';
 import { MusicGenreModule } from 'src/features/admin/music-genre/music-genre.module';
@@ -41,6 +42,10 @@ export default RouterModule.register([
           {
             path: 'events',
             module: EventModule,
+          },
+          {
+            path: 'classrooms',
+            module: ClassroomModule,
           },
         ],
       },

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+import { CreateEventDto } from '../../../models/events/dto/create-event.dto';
+import { UpdateEventDto } from '../../../models/events/dto/update-event.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
-import { Event } from './entities/event.entity';
+import { Event } from '../../../models/events/entities/event.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { SharpHelper } from 'src/cores/helpers/sharp.helper';
 
