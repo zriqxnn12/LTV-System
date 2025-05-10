@@ -38,4 +38,13 @@ export class User extends Model {
 
   @Column(DataType.STRING)
   address: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  birth_place: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  birth_date: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  profile_file_path: string;
 }
