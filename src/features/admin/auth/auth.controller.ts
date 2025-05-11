@@ -11,7 +11,7 @@ import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 import { LocalAuthGuard } from 'src/cores/guards/local-auth.guard';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { AuthService } from './auth.service';
-import { registerSchema } from './validations/requests/register.request';
+import { registerSchema } from '../../../validators/requests/register.request';
 import { CreateUserDto } from 'src/models/users/dto/create-user.dto';
 
 @Controller()

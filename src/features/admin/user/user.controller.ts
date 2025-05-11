@@ -14,9 +14,9 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
-import { userIdParamSchema } from './validations/params/user-id.param';
+import { userIdParamSchema } from '../../../validators/params/user-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
-import { createUserSchema } from './validations/requests/create-user.request';
+import { createUserSchema } from '../../../validators/requests/create-user.request';
 import { CreateUserDto } from 'src/models/users/dto/create-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';

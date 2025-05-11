@@ -4,7 +4,7 @@ import { UpdateMusicGenreDto } from '../../../models/music-genres/dto/update-mus
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
-import { Genre } from './entities/music-genre.entity';
+import { Genre } from '../../../models/music-genres/entities/music-genre.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 
 @Injectable()

@@ -14,10 +14,10 @@ import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from '../../../models/instruments/dto/create-instrument.dto';
 import { UpdateInstrumentDto } from '../../../models/instruments/dto/update-instrument.dto';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
-import { createInstrumentSchema } from './validations/requests/create-instrument.request';
-import { instrumentIdParamSchema } from './validations/params/instrument-id.param';
+import { createInstrumentSchema } from '../../../validators/requests/create-instrument.request';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { instrumentIdParamSchema } from 'src/validators/params/instrument-id.param';
 
 @Controller()
 export class InstrumentController {

@@ -14,6 +14,10 @@ import { ClassroomService } from './classroom.service';
 import { CreateClassroomDto } from '../../../models/classrooms/dto/create-classroom.dto';
 import { UpdateClassroomDto } from '../../../models/classrooms/dto/update-classroom.dto';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { classroomIdParamSchema } from 'src/validators/params/classroom-id.param';
+import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
+import { createClassroomSchema } from 'src/validators/requests/create-classroom.request';
 
 @Controller()
 export class ClassroomController {
@@ -33,22 +37,27 @@ export class ClassroomController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id', new JoiValidationParamPipe(classroomIdParamSchema)) id: string,
+  ) {
     return this.classroomService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(
-    @Param('id') id: string,
-    @Body() updateClassroomDto: UpdateClassroomDto,
+    @Param('id', new JoiValidationParamPipe(classroomIdParamSchema)) id: string,
+    @Body(new JoiValidationPipe(createClassroomSchema))
+    updateClassroomDto: UpdateClassroomDto,
   ) {
     return this.classroomService.update(+id, updateClassroomDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id', new JoiValidationParamPipe(classroomIdParamSchema)) id: string,
+  ) {
     return this.classroomService.remove(+id);
   }
 }

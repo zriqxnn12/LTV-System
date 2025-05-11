@@ -14,10 +14,10 @@ import { BranchService } from './branch.service';
 import { CreateBranchDto } from '../../../models/branches/dto/create-branch.dto';
 import { UpdateBranchDto } from '../../../models/branches/dto/update-branch.dto';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
-import { branchIdParamSchema } from './validations/params/branch-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
-import { createBranchSchema } from './validations/requests/create-branch.request';
+import { createBranchSchema } from '../../../validators/requests/create-branch.request';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { branchIdParamSchema } from 'src/validators/params/branch-id.param';
 
 @Controller()
 export class BranchController {

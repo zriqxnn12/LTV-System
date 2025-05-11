@@ -14,10 +14,10 @@ import { MusicGenreService } from './music-genre.service';
 import { CreateMusicGenreDto } from '../../../models/music-genres/dto/create-music-genre.dto';
 import { UpdateMusicGenreDto } from '../../../models/music-genres/dto/update-music-genre.dto';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
-import { musicGenreIdParamSchema } from './validations/params/music-genre-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
-import { createMusicGenreSchema } from './validations/requests/create-music-genre.request';
+import { createMusicGenreSchema } from '../../../validators/requests/create-music-genre.request';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { musicGenreIdParamSchema } from 'src/validators/params/music-genre-id.param';
 
 @Controller()
 export class MusicGenreController {

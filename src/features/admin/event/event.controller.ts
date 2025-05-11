@@ -17,10 +17,10 @@ import { CreateEventDto } from '../../../models/events/dto/create-event.dto';
 import { UpdateEventDto } from '../../../models/events/dto/update-event.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
-import { eventIdParamSchema } from './validations/params/event-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
-import { createEventSchema } from './validations/requests/create-event.request';
+import { createEventSchema } from '../../../validators/requests/create-event.request';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { eventIdParamSchema } from 'src/validators/params/event-id.param';
 
 @Controller()
 export class EventController {
