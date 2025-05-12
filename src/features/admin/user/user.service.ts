@@ -16,26 +16,10 @@ export class UserService {
     private userModel: typeof User,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const transaction = await this.sequelize.transaction();
-    try {
-      const user = await this.userModel.create({
-        ...createUserDto,
-      });
-      await transaction.commit();
-      console.log('data', user);
-      return this.response.success(user, 201, 'Successfully create user');
-    } catch (error) {
-      await transaction.rollback();
-      return this.response.fail('Failed to create user', 400);
-    }
-  }
-
   async findAll(query: any) {
-    const { count, data } = await new QueryBuilderHelper(
-      this.userModel,
-      query,
-    ).getResult();
+    const { count, data } = await new QueryBuilderHelper(this.userModel, query)
+      .load('staff')
+      .getResult();
 
     const result = {
       count: count,
@@ -49,6 +33,7 @@ export class UserService {
     try {
       const user = await this.userModel.findOne({
         where: { id },
+        include: [{ association: 'staff' }],
       });
 
       return this.response.success(user, 200, 'Successfully retrieve users');

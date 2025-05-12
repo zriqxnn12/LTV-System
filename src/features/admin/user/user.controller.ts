@@ -25,22 +25,19 @@ import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() query) {
     return this.userService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(
     @Param('id', new JoiValidationParamPipe(userIdParamSchema))
     id: number,
   ) {
     return this.userService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
   }
 
   @Patch(':id')

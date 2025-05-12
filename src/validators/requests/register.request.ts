@@ -1,4 +1,6 @@
 import * as Joi from 'joi';
+import StaffRoleEnum from 'src/models/staff/enums/staff-role.enum';
+import StaffStatusEnum from 'src/models/staff/enums/staff-status.enum';
 import { User } from 'src/models/users/entities/user.entity';
 
 export const registerSchema = Joi.object({
@@ -64,10 +66,18 @@ export const registerSchema = Joi.object({
   birth_date: Joi.date().optional().allow(null, ''),
   profile_file_path: Joi.string().optional().allow(null, ''),
   staff: Joi.object({
-    role_name: Joi.string().required(),
-    status_name: Joi.string().required(),
-    role: Joi.number().required(),
-    status: Joi.number().required(),
+    role_name: Joi.string().optional(),
+    status_name: Joi.string().optional(),
+    role: Joi.number()
+      .valid(
+        ...Object.values(StaffRoleEnum).filter((v) => typeof v === 'number'),
+      )
+      .required(),
+    status: Joi.number()
+      .valid(
+        ...Object.values(StaffStatusEnum).filter((v) => typeof v === 'number'),
+      )
+      .required(),
     note: Joi.string().optional(),
   }).optional(),
 }).options({ abortEarly: false });

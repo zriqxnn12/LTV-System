@@ -6,6 +6,8 @@ import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Staff } from 'src/models/staff/entities/staff.entity';
+import { getStaffRoleEnumLabel } from 'src/models/staff/enums/staff-role.enum';
+import { getStaffStatusEnumLabel } from 'src/models/staff/enums/staff-status.enum';
 import { CreateUserDto } from 'src/models/users/dto/create-user.dto';
 import { User } from 'src/models/users/entities/user.entity';
 
@@ -86,6 +88,13 @@ export class AuthService {
         ],
         transaction,
       });
+
+      if (getUser?.staff) {
+        getUser.staff.role_name = getStaffRoleEnumLabel(getUser.staff.role);
+        getUser.staff.status_name = getStaffStatusEnumLabel(
+          getUser.staff.status,
+        );
+      }
 
       delete user.password;
       await transaction.commit();

@@ -1,3 +1,6 @@
+import StaffRoleEnum from 'src/models/staff/enums/staff-role.enum';
+import StaffStatusEnum from 'src/models/staff/enums/staff-status.enum';
+
 export class CreateUserDto {
   name: string;
   username: string;
@@ -9,10 +12,10 @@ export class CreateUserDto {
   birth_date: string;
   profile_file_path: string;
   staff?: {
-    role_name: string;
-    status_name: string;
-    role: number;
-    status: number;
+    role_name?: string;
+    status_name?: string;
+    role: StaffRoleEnum;
+    status: StaffStatusEnum;
     note: string;
   };
 }

@@ -7,6 +7,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from 'src/models/users/entities/user.entity';
+import { getStaffRoleEnumLabel } from '../enums/staff-role.enum';
+import { getStaffStatusEnumLabel } from '../enums/staff-status.enum';
 
 @Table({
   timestamps: true,
@@ -22,10 +24,20 @@ export class Staff extends Model {
   @Column(DataType.NUMBER)
   user_id: number;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.VIRTUAL,
+    get(this: Staff) {
+      return getStaffRoleEnumLabel(this.getDataValue('role'));
+    },
+  })
   role_name: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.VIRTUAL,
+    get(this: Staff) {
+      return getStaffStatusEnumLabel(this.getDataValue('status'));
+    },
+  })
   status_name: string;
 
   @Column(DataType.TINYINT)
