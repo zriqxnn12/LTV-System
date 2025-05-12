@@ -8,10 +8,11 @@ import { LocalStrategy } from 'src/cores/strategies/local.strategy';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/users/entities/user.entity';
+import { Staff } from 'src/models/staff/entities/staff.entity';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User]),
+    SequelizeModule.forFeature([User, Staff]),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

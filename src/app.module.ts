@@ -16,6 +16,7 @@ import { MusicGenreModule } from './features/admin/music-genre/music-genre.modul
 import { BranchModule } from './features/admin/branch/branch.module';
 import { EventModule } from './features/admin/event/event.module';
 import { ClassroomModule } from './features/admin/classroom/classroom.module';
+import { StaffModule } from './features/admin/staff/staff.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ClassroomModule } from './features/admin/classroom/classroom.module';
     BranchModule,
     EventModule,
     ClassroomModule,
+    StaffModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],

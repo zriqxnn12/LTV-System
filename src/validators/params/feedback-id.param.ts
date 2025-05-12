@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Feedback } from '../../../../../models/feedbacks/entities/feedback.entity';
+import { Feedback } from 'src/models/feedbacks/entities/feedback.entity';
 
 export const feedbackIdParamSchema = Joi.number()
   .required()

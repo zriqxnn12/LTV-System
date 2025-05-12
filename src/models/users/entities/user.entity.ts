@@ -2,9 +2,11 @@ import {
   Column,
   DataType,
   DefaultScope,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Staff } from 'src/models/staff/entities/staff.entity';
 
 @Table({
   timestamps: true,
@@ -47,4 +49,7 @@ export class User extends Model {
 
   @Column({ type: DataType.STRING, allowNull: true })
   profile_file_path: string;
+
+  @HasOne(() => Staff)
+  staff: Staff;
 }

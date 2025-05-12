@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Event } from '../../../../../models/events/entities/event.entity';
+import { Event } from 'src/models/events/entities/event.entity';
 
 export const eventIdParamSchema = Joi.number()
   .required()

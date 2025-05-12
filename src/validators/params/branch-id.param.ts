@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Branch } from '../../../../../models/branches/entities/branch.entity';
+import { Branch } from 'src/models/branches/entities/branch.entity';
 
 export const branchIdParamSchema = Joi.number()
   .required()

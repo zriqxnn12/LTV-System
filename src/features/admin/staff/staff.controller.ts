@@ -8,10 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { StaffService } from './staff.service';
-import { CreateStaffDto } from '../../models/staff/dto/create-staff.dto';
-import { UpdateStaffDto } from '../../models/staff/dto/update-staff.dto';
+import { CreateStaffDto } from '../../../models/staff/dto/create-staff.dto';
+import { UpdateStaffDto } from '../../../models/staff/dto/update-staff.dto';
 
-@Controller('staff')
+@Controller()
 export class StaffController {
   constructor(private readonly staffService: StaffService) {}
 

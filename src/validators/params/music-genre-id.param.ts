@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Genre } from '../../entities/music-genre.entity';
+import { Genre } from 'src/models/music-genres/entities/music-genre.entity';
 
 export const musicGenreIdParamSchema = Joi.number()
   .required()

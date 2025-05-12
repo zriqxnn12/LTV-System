@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Classroom } from '../../../../../models/classrooms/entities/classroom.entity';
+import { Classroom } from 'src/models/classrooms/entities/classroom.entity';
 
 export const classroomIdParamSchema = Joi.number()
   .required()

@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Instrument } from '../../../../../models/instruments/entities/instrument.entity';
+import { Instrument } from 'src/models/instruments/entities/instrument.entity';
 
 export const instrumentIdParamSchema = Joi.number()
   .required()
