@@ -6,6 +6,7 @@ import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Staff } from 'src/models/staff/entities/staff.entity';
+import { Teacher } from 'src/models/staff/entities/teacher.entity';
 import { getStaffRoleEnumLabel } from 'src/models/staff/enums/staff-role.enum';
 import { getStaffStatusEnumLabel } from 'src/models/staff/enums/staff-status.enum';
 import { CreateUserDto } from 'src/models/users/dto/create-user.dto';
@@ -19,12 +20,22 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectModel(User) private userModel: typeof User,
     @InjectModel(Staff) private staffModel: typeof Staff,
+    @InjectModel(Teacher) private teacherModel: typeof Teacher,
   ) {}
 
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
     const getUser = await this.userModel.findByPk(user.id, {
-      include: [{ model: this.staffModel }],
+      include: [
+        {
+          model: this.staffModel,
+          include: [
+            {
+              model: this.teacherModel,
+            },
+          ],
+        },
+      ],
     });
     const result = {
       getUser,
@@ -70,7 +81,7 @@ export class AuthService {
         .then((value) => value.toJSON());
 
       if (staff) {
-        await this.staffModel.create(
+        const staffRecord = await this.staffModel.create(
           {
             user_id: user.id,
             ...staff,
@@ -78,12 +89,23 @@ export class AuthService {
           },
           { transaction },
         );
+
+        if (staff.teacher) {
+          await this.teacherModel.create(
+            {
+              ...staff.teacher,
+              staff_id: staffRecord.id,
+            },
+            { transaction },
+          );
+        }
       }
 
       const getUser = await this.userModel.findByPk(user.id, {
         include: [
           {
             model: this.staffModel,
+            include: [{ model: this.teacherModel }],
           },
         ],
         transaction,
@@ -111,7 +133,16 @@ export class AuthService {
 
   async profile(user: User) {
     const getUser = await this.userModel.findByPk(user.id, {
-      include: [{ model: this.staffModel }],
+      include: [
+        {
+          model: this.staffModel,
+          include: [
+            {
+              model: this.teacherModel,
+            },
+          ],
+        },
+      ],
     });
     return this.response.success(
       getUser,

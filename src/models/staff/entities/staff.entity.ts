@@ -3,12 +3,14 @@ import {
   Column,
   DataType,
   ForeignKey,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { User } from 'src/models/users/entities/user.entity';
 import { getStaffRoleEnumLabel } from '../enums/staff-role.enum';
 import { getStaffStatusEnumLabel } from '../enums/staff-status.enum';
+import { Teacher } from 'src/models/staff/entities/teacher.entity';
 
 @Table({
   timestamps: true,
@@ -51,4 +53,7 @@ export class Staff extends Model {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasOne(() => Teacher)
+  teacher: Teacher;
 }

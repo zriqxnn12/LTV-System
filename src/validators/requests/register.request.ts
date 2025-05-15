@@ -1,6 +1,7 @@
 import * as Joi from 'joi';
 import StaffRoleEnum from 'src/models/staff/enums/staff-role.enum';
 import StaffStatusEnum from 'src/models/staff/enums/staff-status.enum';
+import TeacherType from 'src/models/staff/enums/teacher-type.enum';
 import { User } from 'src/models/users/entities/user.entity';
 
 export const registerSchema = Joi.object({
@@ -65,6 +66,7 @@ export const registerSchema = Joi.object({
   birth_place: Joi.string().optional().allow(null, ''),
   birth_date: Joi.date().optional().allow(null, ''),
   profile_file_path: Joi.string().optional().allow(null, ''),
+  // staff
   staff: Joi.object({
     role_name: Joi.string().optional(),
     status_name: Joi.string().optional(),
@@ -79,5 +81,14 @@ export const registerSchema = Joi.object({
       )
       .required(),
     note: Joi.string().optional(),
+    // teacher
+    teacher: Joi.object({
+      type_name: Joi.string().optional(),
+      type: Joi.number().valid(
+        ...Object.values(TeacherType).filter((v) => typeof v === 'number'),
+      ),
+      description: Joi.string().optional().allow(null, ''),
+      qualify: Joi.string().optional().allow(null, ''),
+    }).optional(),
   }).optional(),
 }).options({ abortEarly: false });

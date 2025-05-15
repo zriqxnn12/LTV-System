@@ -9,10 +9,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/users/entities/user.entity';
 import { Staff } from 'src/models/staff/entities/staff.entity';
+import { Teacher } from 'src/models/staff/entities/teacher.entity';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User, Staff]),
+    SequelizeModule.forFeature([User, Staff, Teacher]),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

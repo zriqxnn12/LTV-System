@@ -1,5 +1,6 @@
 import StaffRoleEnum from 'src/models/staff/enums/staff-role.enum';
 import StaffStatusEnum from 'src/models/staff/enums/staff-status.enum';
+import TeacherType from 'src/models/staff/enums/teacher-type.enum';
 
 export class CreateUserDto {
   name: string;
@@ -17,5 +18,13 @@ export class CreateUserDto {
     role: StaffRoleEnum;
     status: StaffStatusEnum;
     note: string;
+    teacher: {
+      classroom_id: number;
+      branch_id: number;
+      type_name?: string;
+      type: TeacherType;
+      description: string;
+      qualify: string;
+    };
   };
 }
