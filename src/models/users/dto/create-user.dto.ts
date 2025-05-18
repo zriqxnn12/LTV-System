@@ -18,7 +18,7 @@ export class CreateUserDto {
     role: StaffRoleEnum;
     status: StaffStatusEnum;
     note: string;
-    teacher: {
+    teacher?: {
       classroom_id: number;
       branch_id: number;
       type_name?: string;
@@ -26,5 +26,14 @@ export class CreateUserDto {
       description: string;
       qualify: string;
     };
+  };
+  student?: {
+    gender: string;
+    religion: string;
+    school: string;
+    province: string;
+    city: string;
+    whatsapp_number: string;
+    note: string;
   };
 }

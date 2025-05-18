@@ -7,6 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Staff } from 'src/models/staff/entities/staff.entity';
+import { Student } from 'src/models/students/entities/student.entity';
 
 @Table({
   timestamps: true,
@@ -52,4 +53,7 @@ export class User extends Model {
 
   @HasOne(() => Staff)
   staff: Staff;
+
+  @HasOne(() => Student)
+  student: Student;
 }

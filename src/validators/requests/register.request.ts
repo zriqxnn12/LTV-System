@@ -91,4 +91,14 @@ export const registerSchema = Joi.object({
       qualify: Joi.string().optional().allow(null, ''),
     }).optional(),
   }).optional(),
+  // student
+  student: Joi.object({
+    gender: Joi.string().required(),
+    religion: Joi.string().optional().allow(null, ''),
+    school: Joi.string().required(),
+    province: Joi.string().required(),
+    city: Joi.string().required(),
+    whatsapp_number: Joi.string().optional().allow(null, ''),
+    note: Joi.string().optional(),
+  }),
 }).options({ abortEarly: false });

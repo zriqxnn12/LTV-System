@@ -17,6 +17,8 @@ import { BranchModule } from './features/admin/branch/branch.module';
 import { EventModule } from './features/admin/event/event.module';
 import { ClassroomModule } from './features/admin/classroom/classroom.module';
 import { StaffModule } from './features/admin/staff/staff.module';
+import { StudentModule } from './features/admin/student/student.module';
+import { AuthPublicModule } from './features/public/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { StaffModule } from './features/admin/staff/staff.module';
     SequelizeModule.forRootAsync(sequelizeConfigAsync),
     routerConfig,
     AuthModule,
+    AuthPublicModule,
     ResponseModule,
     UserModule,
     NotificationModule,
@@ -38,6 +41,7 @@ import { StaffModule } from './features/admin/staff/staff.module';
     EventModule,
     ClassroomModule,
     StaffModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],

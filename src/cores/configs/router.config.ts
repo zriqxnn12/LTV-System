@@ -7,6 +7,7 @@ import { InstrumentModule } from 'src/features/admin/instrument/instrument.modul
 import { MusicGenreModule } from 'src/features/admin/music-genre/music-genre.module';
 import { NotificationModule } from 'src/features/admin/notification/public/notification.module';
 import { UserModule } from 'src/features/admin/user/user.module';
+import { AuthPublicModule } from 'src/features/public/auth/auth.module';
 
 export default RouterModule.register([
   {
@@ -46,6 +47,15 @@ export default RouterModule.register([
           {
             path: 'classrooms',
             module: ClassroomModule,
+          },
+        ],
+      },
+      {
+        path: '/',
+        children: [
+          {
+            path: 'auth',
+            module: AuthPublicModule,
           },
         ],
       },
