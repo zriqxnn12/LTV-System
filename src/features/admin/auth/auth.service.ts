@@ -64,6 +64,12 @@ export class AuthService {
       if (user) {
         const isValid = await bcrypt.compare(password, user.password);
         if (isValid) {
+          if (!user.staff) {
+            return this.response.fail(
+              'Only admin can be login',
+              HttpStatus.FORBIDDEN,
+            );
+          }
           const result = user.toJSON();
           delete result.password;
           return result;

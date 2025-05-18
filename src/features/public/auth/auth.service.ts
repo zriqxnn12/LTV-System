@@ -101,6 +101,7 @@ export class AuthPublicService {
           {
             user_id: user.id,
             ...student,
+            note: student.note || '-',
           },
           { transaction },
         );
