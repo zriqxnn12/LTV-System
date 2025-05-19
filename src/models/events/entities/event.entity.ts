@@ -32,7 +32,10 @@ export class Event extends Model {
   @Column({ type: DataType.INTEGER, allowNull: false })
   type: number;
 
-  @Column({ type: DataType.DECIMAL, allowNull: false })
+  @Column({
+    type: DataType.DECIMAL(16, 2),
+    allowNull: false,
+  })
   fee: string;
 
   @Column({ type: DataType.TIME, allowNull: false })

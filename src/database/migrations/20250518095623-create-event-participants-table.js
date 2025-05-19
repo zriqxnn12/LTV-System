@@ -3,53 +3,50 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('events', {
+    await queryInterface.createTable('event_participants', {
       id: {
         type: Sequelize.BIGINT,
         autoIncrement: true,
         primaryKey: true,
       },
-      title: {
+      user_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      event_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        references: {
+          model: 'events',
+          key: 'id',
+        },
+      },
+      status_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      file_path: {
-        type: Sequelize.STRING,
+      status: {
+        type: Sequelize.TINYINT,
         allowNull: false,
       },
-      address: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      type_name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      quota: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      type: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      fee: {
+      total: {
         type: Sequelize.DECIMAL(16, 2),
         allowNull: false,
       },
-      start_time: {
-        type: Sequelize.TIME,
+      is_paid: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
-      end_time: {
-        type: Sequelize.TIME,
-        allowNull: false,
+      paid_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
-      description: {
+      file_path: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -77,6 +74,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('events');
+    await queryInterface.dropTable('event_participants');
   },
 };

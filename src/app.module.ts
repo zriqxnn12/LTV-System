@@ -19,6 +19,7 @@ import { ClassroomModule } from './features/admin/classroom/classroom.module';
 import { StaffModule } from './features/admin/staff/staff.module';
 import { StudentModule } from './features/admin/student/student.module';
 import { AuthPublicModule } from './features/public/auth/auth.module';
+import { EventParticipantModule } from './features/admin/event-participant/event-participant.module';
 
 @Module({
   imports: [
@@ -30,8 +31,8 @@ import { AuthPublicModule } from './features/public/auth/auth.module';
     }),
     SequelizeModule.forRootAsync(sequelizeConfigAsync),
     routerConfig,
+    // admin
     AuthModule,
-    AuthPublicModule,
     ResponseModule,
     UserModule,
     NotificationModule,
@@ -39,9 +40,13 @@ import { AuthPublicModule } from './features/public/auth/auth.module';
     MusicGenreModule,
     BranchModule,
     EventModule,
+    EventParticipantModule,
     ClassroomModule,
     StaffModule,
     StudentModule,
+
+    // public
+    AuthPublicModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],
