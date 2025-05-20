@@ -4,11 +4,13 @@ import { BranchModule } from 'src/features/admin/branch/branch.module';
 import { ClassroomModule } from 'src/features/admin/classroom/classroom.module';
 import { EventParticipantModule } from 'src/features/admin/event-participant/event-participant.module';
 import { EventModule } from 'src/features/admin/event/event.module';
+import { FeedbackModule } from 'src/features/admin/feedback/feedback.module';
 import { InstrumentModule } from 'src/features/admin/instrument/instrument.module';
 import { MusicGenreModule } from 'src/features/admin/music-genre/music-genre.module';
 import { NotificationModule } from 'src/features/admin/notification/public/notification.module';
 import { UserModule } from 'src/features/admin/user/user.module';
 import { AuthPublicModule } from 'src/features/public/auth/auth.module';
+import { FeedbackPublicModule } from 'src/features/public/feedback/feedback.module';
 
 export default RouterModule.register([
   {
@@ -55,6 +57,10 @@ export default RouterModule.register([
             path: 'classrooms',
             module: ClassroomModule,
           },
+          {
+            path: 'feedbacks',
+            module: FeedbackModule,
+          },
         ],
       },
       {
@@ -63,6 +69,10 @@ export default RouterModule.register([
           {
             path: 'auth',
             module: AuthPublicModule,
+          },
+          {
+            path: 'feedbacks',
+            module: FeedbackPublicModule,
           },
         ],
       },

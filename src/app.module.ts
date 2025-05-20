@@ -20,6 +20,8 @@ import { StaffModule } from './features/admin/staff/staff.module';
 import { StudentModule } from './features/admin/student/student.module';
 import { AuthPublicModule } from './features/public/auth/auth.module';
 import { EventParticipantModule } from './features/admin/event-participant/event-participant.module';
+import { FeedbackModule } from './features/admin/feedback/feedback.module';
+import { FeedbackPublicModule } from './features/public/feedback/feedback.module';
 
 @Module({
   imports: [
@@ -44,9 +46,11 @@ import { EventParticipantModule } from './features/admin/event-participant/event
     ClassroomModule,
     StaffModule,
     StudentModule,
+    FeedbackModule,
 
     // public
     AuthPublicModule,
+    FeedbackPublicModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],

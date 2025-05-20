@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -27,6 +28,9 @@ export class Feedback extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   note: string;
 
-  @Column({ type: DataType.BOOLEAN, allowNull: false })
-  is_anonymous: string;
+  @Column({ type: DataType.BOOLEAN, allowNull: true })
+  is_anonymous: boolean;
+
+  @BelongsTo(() => User)
+  user: User;
 }
