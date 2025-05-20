@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
+  Put,
 } from '@nestjs/common';
 import { EventParticipantService } from './event-participant.service';
 import { CreateEventParticipantDto } from '../../../models/event-participants/dto/create-event-participant.dto';
@@ -16,6 +18,7 @@ import { eventIdParamSchema } from 'src/validators/params/event-id.param';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { createEventParticipantSchema } from 'src/validators/requests/create-event-participant.request';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { eventParticipantIdParamSchema } from 'src/validators/params/event-participant-id.param';
 
 @Controller()
 export class EventParticipantController {
@@ -37,26 +40,52 @@ export class EventParticipantController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.eventParticipantService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.eventParticipantService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateEventParticipantDto: UpdateEventParticipantDto,
+  findAll(
+    @Query() query,
+    @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
+    eventId: string,
   ) {
-    return this.eventParticipantService.update(+id, updateEventParticipantDto);
+    return this.eventParticipantService.findAll(query, eventId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  findOne(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: string,
+    @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
+    eventId: string,
+  ) {
+    return this.eventParticipantService.findOne(+id, eventId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  update(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: string,
+    @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
+    eventId: string,
+    @Body(new JoiValidationPipe(createEventParticipantSchema))
+    updateEventParticipantDto: CreateEventParticipantDto,
+  ) {
+    return this.eventParticipantService.update(
+      +id,
+      updateEventParticipantDto,
+      eventId,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventParticipantService.remove(+id);
+  delete(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: string,
+    @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
+    eventId: string,
+  ) {
+    return this.eventParticipantService.delete(+id, eventId);
   }
 }

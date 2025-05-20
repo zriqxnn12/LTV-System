@@ -6,6 +6,9 @@ import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { EventParticipant } from 'src/models/event-participants/entities/event-participant.entity';
 import { Event } from 'src/models/events/entities/event.entity';
+import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
+import { S3Helper } from 'src/cores/helpers/s3.helper';
+import EventParticipantStatusEnum from 'src/models/event-participants/enums/event-participant-status.enum';
 
 @Injectable()
 export class EventParticipantService {
@@ -47,19 +50,99 @@ export class EventParticipantService {
     }
   }
 
-  findAll() {
-    return `This action returns all eventParticipant`;
+  async findAll(query: any, eventId: string) {
+    const { count, data } = await new QueryBuilderHelper(
+      this.eventParticipantModel,
+      query,
+    )
+      .where({ event_id: +eventId })
+      .load('user')
+      .getResult();
+
+    const result = {
+      count: count,
+      event_participants: data,
+    };
+    return this.response.success(
+      result,
+      200,
+      'Successfully retrieve event participants',
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} eventParticipant`;
+  async findOne(id: number, eventId: string) {
+    try {
+      const eventParticipant = await this.eventParticipantModel.findOne({
+        where: { id: id, event_id: +eventId },
+        include: ['user'],
+      });
+      return this.response.success(
+        eventParticipant,
+        200,
+        'Successfully retrieve event participant',
+      );
+    } catch (error) {
+      return this.response.fail(error, 400);
+    }
   }
 
-  update(id: number, updateEventParticipantDto: UpdateEventParticipantDto) {
-    return `This action updates a #${id} eventParticipant`;
+  async update(
+    id: number,
+    updateEventParticipantDto: CreateEventParticipantDto,
+    eventId: string,
+  ) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const eventParticipant = await this.eventParticipantModel.findOne({
+        where: { id: id, event_id: +eventId },
+        transaction: transaction,
+      });
+
+      await eventParticipant.update(updateEventParticipantDto, {
+        transaction: transaction,
+      });
+      await transaction.commit();
+      return this.response.success(
+        eventParticipant,
+        200,
+        'Successfully update event participant',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail(error, 400);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} eventParticipant`;
+  async delete(id: number, eventId: string) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const eventParticipant = await this.eventParticipantModel.findOne({
+        where: { id: id, event_id: +eventId },
+        transaction: transaction,
+      });
+
+      if (
+        eventParticipant.status !== EventParticipantStatusEnum.REQUEST_TO_JOIN
+      ) {
+        return this.response.fail(
+          'Event participant is rejected or approved',
+          400,
+        );
+      }
+
+      const s3Helper = new S3Helper();
+      await s3Helper.deleteFile(eventParticipant.file_path);
+
+      await eventParticipant.destroy({ transaction: transaction });
+      await transaction.commit();
+      return this.response.success(
+        eventParticipant,
+        200,
+        'Successfully delete event participant',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail(error, 400);
+    }
   }
 }
