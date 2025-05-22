@@ -25,7 +25,10 @@ export class InstrumentController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createInstrumentDto: CreateInstrumentDto) {
+  async create(
+    @Body(new JoiValidationPipe(createInstrumentSchema))
+    createInstrumentDto: CreateInstrumentDto,
+  ) {
     return this.instrumentService.create(createInstrumentDto);
   }
 

@@ -9,6 +9,7 @@ import { InstrumentModule } from 'src/features/admin/instrument/instrument.modul
 import { MusicGenreModule } from 'src/features/admin/music-genre/music-genre.module';
 import { NotificationModule } from 'src/features/admin/notification/public/notification.module';
 import { UserModule } from 'src/features/admin/user/user.module';
+import { CoursePackageModule } from 'src/features/course-package/course-package.module';
 import { AuthPublicModule } from 'src/features/public/auth/auth.module';
 import { FeedbackPublicModule } from 'src/features/public/feedback/feedback.module';
 
@@ -60,6 +61,10 @@ export default RouterModule.register([
           {
             path: 'feedbacks',
             module: FeedbackModule,
+          },
+          {
+            path: 'course-packages',
+            module: CoursePackageModule,
           },
         ],
       },
