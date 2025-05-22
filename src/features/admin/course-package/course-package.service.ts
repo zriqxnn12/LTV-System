@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCoursePackageDto } from '../../models/course-packages/dto/create-course-package.dto';
-import { UpdateCoursePackageDto } from '../../models/course-packages/dto/update-course-package.dto';
+import { CreateCoursePackageDto } from '../../../models/course-packages/dto/create-course-package.dto';
+import { UpdateCoursePackageDto } from '../../../models/course-packages/dto/update-course-package.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';

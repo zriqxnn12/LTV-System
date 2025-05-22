@@ -11,8 +11,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { CoursePackageService } from './course-package.service';
-import { CreateCoursePackageDto } from '../../models/course-packages/dto/create-course-package.dto';
-import { UpdateCoursePackageDto } from '../../models/course-packages/dto/update-course-package.dto';
+import { CreateCoursePackageDto } from '../../../models/course-packages/dto/create-course-package.dto';
+import { UpdateCoursePackageDto } from '../../../models/course-packages/dto/update-course-package.dto';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { createCoursePackageSchema } from 'src/validators/requests/create-course-package.request';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';

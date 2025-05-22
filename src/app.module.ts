@@ -22,7 +22,7 @@ import { AuthPublicModule } from './features/public/auth/auth.module';
 import { EventParticipantModule } from './features/admin/event-participant/event-participant.module';
 import { FeedbackModule } from './features/admin/feedback/feedback.module';
 import { FeedbackPublicModule } from './features/public/feedback/feedback.module';
-import { CoursePackageModule } from './features/course-package/course-package.module';
+import { CoursePackageModule } from './features/admin/course-package/course-package.module';
 
 @Module({
   imports: [
