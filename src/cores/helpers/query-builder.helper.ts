@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import sequelize, { Op } from 'sequelize';
+import sequelize, { Includeable, Op } from 'sequelize';
 
 @Injectable()
 export class QueryBuilderHelper {
@@ -156,8 +156,17 @@ export class QueryBuilderHelper {
   }
 
   public load(...relations) {
-    this.relation = this.buildEagerLoad(relations);
+    this.relation = this.buildMixerEagerLoad(relations);
     return this;
+  }
+
+  private buildMixerEagerLoad(relations: (string | Includeable)[]) {
+    return relations.map((relation) => {
+      if (typeof relation === 'string') {
+        return { association: relation };
+      }
+      return relation;
+    });
   }
 
   public paginate(query) {

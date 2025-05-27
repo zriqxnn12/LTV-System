@@ -25,7 +25,10 @@ export class BranchController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createBranchDto: CreateBranchDto) {
+  create(
+    @Body(new JoiValidationPipe(createBranchSchema))
+    createBranchDto: CreateBranchDto,
+  ) {
     return this.branchService.create(createBranchDto);
   }
 
