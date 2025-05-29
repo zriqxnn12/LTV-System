@@ -13,6 +13,7 @@ import { CoursePackageModule } from 'src/features/admin/course-package/course-pa
 import { AuthPublicModule } from 'src/features/public/auth/auth.module';
 import { FeedbackPublicModule } from 'src/features/public/feedback/feedback.module';
 import { ServiceInvoiceModule } from 'src/features/admin/service-invoice/service-invoice.module';
+import { ServiceInvoiceDocumentPublicModule } from 'src/features/public/service-invoice-document/service-invoice-document.module';
 
 export default RouterModule.register([
   {
@@ -83,6 +84,10 @@ export default RouterModule.register([
           {
             path: 'feedbacks',
             module: FeedbackPublicModule,
+          },
+          {
+            path: 'service-invoice-documents',
+            module: ServiceInvoiceDocumentPublicModule,
           },
         ],
       },

@@ -4,12 +4,14 @@ import {
   DataType,
   ForeignKey,
   HasMany,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { ServiceInvoiceDetail } from 'src/models/service-invoice-details/entities/service-invoice-detail.entity';
 import { User } from 'src/models/users/entities/user.entity';
 import { getServiceInvoiceStatusEnumLabel } from '../enums/service-invoice-status.enum';
+import { ServiceInvoiceDocument } from './service-invoice-document.entity';
 
 @Table({
   timestamps: true,
@@ -54,6 +56,9 @@ export class ServiceInvoice extends Model {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasOne(() => ServiceInvoiceDocument)
+  service_invoice_document: ServiceInvoiceDocument;
 
   @HasMany(() => ServiceInvoiceDetail)
   service_invoice_details: ServiceInvoiceDetail[];

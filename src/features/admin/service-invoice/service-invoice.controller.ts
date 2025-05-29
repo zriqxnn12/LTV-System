@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
+  Put,
 } from '@nestjs/common';
 import { ServiceInvoiceService } from './service-invoice.service';
 import { CreateServiceInvoiceDto } from '../../../models/service-invoices/dto/create-service-invoice.dto';
@@ -46,7 +47,7 @@ export class ServiceInvoiceController {
     return this.serviceInvoiceService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id', new JoiValidationParamPipe(serviceInvoiceIdParamSchema))
     id: string,
