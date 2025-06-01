@@ -14,6 +14,7 @@ import { AuthPublicModule } from 'src/features/public/auth/auth.module';
 import { FeedbackPublicModule } from 'src/features/public/feedback/feedback.module';
 import { ServiceInvoiceModule } from 'src/features/admin/service-invoice/service-invoice.module';
 import { ServiceInvoiceDocumentPublicModule } from 'src/features/public/service-invoice-document/service-invoice-document.module';
+import { ServiceInvoicePublicModule } from 'src/features/public/service-invoice/service-invoice.module';
 
 export default RouterModule.register([
   {
@@ -86,8 +87,14 @@ export default RouterModule.register([
             module: FeedbackPublicModule,
           },
           {
-            path: 'service-invoice-documents',
-            module: ServiceInvoiceDocumentPublicModule,
+            path: 'service-invoices',
+            module: ServiceInvoicePublicModule,
+            children: [
+              {
+                path: ':invoiceId/document',
+                module: ServiceInvoiceDocumentPublicModule,
+              },
+            ],
           },
         ],
       },

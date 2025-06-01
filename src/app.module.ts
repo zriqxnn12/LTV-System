@@ -25,6 +25,7 @@ import { FeedbackPublicModule } from './features/public/feedback/feedback.module
 import { CoursePackageModule } from './features/admin/course-package/course-package.module';
 import { ServiceInvoiceModule } from './features/admin/service-invoice/service-invoice.module';
 import { ServiceInvoiceDocumentPublicModule } from './features/public/service-invoice-document/service-invoice-document.module';
+import { ServiceInvoicePublicModule } from './features/public/service-invoice/service-invoice.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { ServiceInvoiceDocumentPublicModule } from './features/public/service-in
     // public
     AuthPublicModule,
     FeedbackPublicModule,
+    ServiceInvoicePublicModule,
     ServiceInvoiceDocumentPublicModule,
   ],
   controllers: [AppController],

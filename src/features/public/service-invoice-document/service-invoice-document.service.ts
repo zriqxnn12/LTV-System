@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
+import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { S3Helper } from 'src/cores/helpers/s3.helper';
 import { CreateServiceInvoiceDocumentDto } from 'src/models/service-invoices/dto/create-service-invoice-document.dto';
 import { ServiceInvoiceDocument } from 'src/models/service-invoices/entities/service-invoice-document.entity';
+import { ServiceInvoice } from 'src/models/service-invoices/entities/service-invoice.entity';
+import ServiceInvoiceStatus from 'src/models/service-invoices/enums/service-invoice-status.enum';
 
 @Injectable()
 export class ServiceInvoiceDocumentPublicService {
@@ -13,12 +16,11 @@ export class ServiceInvoiceDocumentPublicService {
     private sequelize: Sequelize,
     @InjectModel(ServiceInvoiceDocument)
     private serviceInvoiceDocumentModel: typeof ServiceInvoiceDocument,
+    @InjectModel(ServiceInvoice)
+    private serviceInvoiceModel: typeof ServiceInvoice,
   ) {}
 
-  async create(
-    createServiceInvoiceDocumentDto: CreateServiceInvoiceDocumentDto,
-    file: Express.Multer.File,
-  ) {
+  async create(invoiceId: number, file: Express.Multer.File) {
     if (!file) {
       return this.response.fail('image is required', 400);
     }
@@ -37,10 +39,20 @@ export class ServiceInvoiceDocumentPublicService {
 
       const invoiceDocument = await this.serviceInvoiceDocumentModel.create(
         {
-          ...createServiceInvoiceDocumentDto,
+          service_invoice_id: invoiceId,
           file_path: uploadImage.key,
         },
         { transaction },
+      );
+
+      await this.serviceInvoiceModel.update(
+        {
+          status: ServiceInvoiceStatus.PAYMENT_APPROVAL,
+        },
+        {
+          where: { id: invoiceId },
+          transaction,
+        },
       );
 
       await transaction.commit();
@@ -59,12 +71,40 @@ export class ServiceInvoiceDocumentPublicService {
     }
   }
 
-  findAll() {
-    return `This action returns all serviceInvoiceDocument`;
+  async findAll(query: any) {
+    const { count, data } = await new QueryBuilderHelper(
+      this.serviceInvoiceDocumentModel,
+      query,
+    ).getResult();
+
+    const result = {
+      count: count,
+      service_invoice_documents: data,
+    };
+    return this.response.success(
+      result,
+      200,
+      'Successfully retrieve service invoice documents',
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} serviceInvoiceDocument`;
+  async findOne(id: number) {
+    try {
+      const invoice = await this.serviceInvoiceDocumentModel.findOne({
+        where: { id },
+      });
+
+      return this.response.success(
+        invoice,
+        200,
+        'Successfully retrieve service invoice document',
+      );
+    } catch (error) {
+      return this.response.fail(
+        'Failed retrieve service invoice document',
+        400,
+      );
+    }
   }
 
   update(

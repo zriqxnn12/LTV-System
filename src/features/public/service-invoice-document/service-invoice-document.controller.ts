@@ -9,13 +9,14 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { ServiceInvoiceDocumentPublicService } from './service-invoice-document.service';
 import { CreateServiceInvoiceDocumentDto } from 'src/models/service-invoices/dto/create-service-invoice-document.dto';
 import { JwtPublicAuthGuard } from 'src/cores/guards/jwt-public-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
-import { createServiceInvoiceDocumentSchema } from 'src/validators/requests/create-invoice-document.request';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { serviceInvoiceIdParamSchema } from 'src/validators/params/service-invoice-id.param';
 
 @Controller()
 export class ServiceInvoiceDocumentPublicController {
@@ -27,19 +28,17 @@ export class ServiceInvoiceDocumentPublicController {
   @Post()
   @UseInterceptors(FileInterceptor('file_path'))
   create(
-    @Body(new JoiValidationPipe(createServiceInvoiceDocumentSchema))
-    createServiceInvoiceDocumentDto: CreateServiceInvoiceDocumentDto,
+    @Param('invoiceId', new JoiValidationParamPipe(serviceInvoiceIdParamSchema))
+    invoiceId: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.serviceInvoiceDocumentService.create(
-      createServiceInvoiceDocumentDto,
-      file,
-    );
+    return this.serviceInvoiceDocumentService.create(+invoiceId, file);
   }
 
+  @UseGuards(JwtPublicAuthGuard)
   @Get()
-  findAll() {
-    return this.serviceInvoiceDocumentService.findAll();
+  findAll(@Query() query) {
+    return this.serviceInvoiceDocumentService.findAll(query);
   }
 
   @Get(':id')

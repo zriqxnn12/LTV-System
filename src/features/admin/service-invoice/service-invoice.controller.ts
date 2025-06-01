@@ -47,6 +47,15 @@ export class ServiceInvoiceController {
     return this.serviceInvoiceService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/status/approve')
+  updateStatusToApproved(
+    @Param('id', new JoiValidationParamPipe(serviceInvoiceIdParamSchema))
+    id: number,
+  ) {
+    return this.serviceInvoiceService.updateStatusToApproved(id);
+  }
+
   @Put(':id')
   update(
     @Param('id', new JoiValidationParamPipe(serviceInvoiceIdParamSchema))

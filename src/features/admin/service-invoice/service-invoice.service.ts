@@ -7,6 +7,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { ServiceInvoice } from 'src/models/service-invoices/entities/service-invoice.entity';
 import { ServiceInvoiceDetail } from 'src/models/service-invoice-details/entities/service-invoice-detail.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
+import ServiceInvoiceStatus from 'src/models/service-invoices/enums/service-invoice-status.enum';
+import { ServiceInvoiceDocument } from 'src/models/service-invoices/entities/service-invoice-document.entity';
 
 @Injectable()
 export class ServiceInvoiceService {
@@ -68,7 +70,7 @@ export class ServiceInvoiceService {
       this.serviceInvoiceModel,
       query,
     )
-      .load('service_invoice_details', {
+      .load('service_invoice_details', 'service_invoice_document', {
         association: 'user',
         include: [{ association: 'student' }],
       })
@@ -94,6 +96,9 @@ export class ServiceInvoiceService {
             association: 'service_invoice_details',
           },
           {
+            association: 'service_invoice_document',
+          },
+          {
             association: 'user',
             include: [
               {
@@ -111,6 +116,41 @@ export class ServiceInvoiceService {
       );
     } catch (error) {
       return this.response.fail('Failed retrieve service invoice', 400);
+    }
+  }
+
+  async updateStatusToApproved(invoiceId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const invoice = await this.serviceInvoiceModel.findOne({
+        where: {
+          id: invoiceId,
+          status: ServiceInvoiceStatus.PAYMENT_APPROVAL,
+        },
+        include: [
+          {
+            model: ServiceInvoiceDocument,
+          },
+        ],
+        transaction,
+      });
+
+      await this.serviceInvoiceModel.update(
+        { status: ServiceInvoiceStatus.APPROVED },
+        {
+          where: { id: invoiceId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(
+        null,
+        200,
+        'Service invoice status successfully updated to Approved',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
     }
   }
 
