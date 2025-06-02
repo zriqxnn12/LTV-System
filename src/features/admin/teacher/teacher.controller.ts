@@ -6,27 +6,32 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { CreateTeacherDto } from '../../../models/teachers/dto/create-teacher.dto';
 import { UpdateTeacherDto } from '../../../models/teachers/dto/update-teacher.dto';
+import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { teacherIdParamSchema } from 'src/validators/params/teacher-id.param';
 
-@Controller('teacher')
+@Controller()
 export class TeacherController {
   constructor(private readonly teacherService: TeacherService) {}
 
-  @Post()
-  create(@Body() createTeacherDto: CreateTeacherDto) {
-    return this.teacherService.create(createTeacherDto);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.teacherService.findAll();
+  findAll(@Query() query) {
+    return this.teacherService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id', new JoiValidationParamPipe(teacherIdParamSchema))
+    id: string,
+  ) {
     return this.teacherService.findOne(+id);
   }
 
@@ -35,8 +40,12 @@ export class TeacherController {
     return this.teacherService.update(+id, updateTeacherDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.teacherService.remove(+id);
+  remove(
+    @Param('id', new JoiValidationParamPipe(teacherIdParamSchema))
+    id: string,
+  ) {
+    return this.teacherService.delete(+id);
   }
 }

@@ -6,27 +6,32 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { StaffService } from './staff.service';
 import { CreateStaffDto } from '../../../models/staff/dto/create-staff.dto';
 import { UpdateStaffDto } from '../../../models/staff/dto/update-staff.dto';
+import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { staffIdParamSchema } from 'src/validators/params/staff-id.param';
 
 @Controller()
 export class StaffController {
   constructor(private readonly staffService: StaffService) {}
 
-  @Post()
-  create(@Body() createStaffDto: CreateStaffDto) {
-    return this.staffService.create(createStaffDto);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.staffService.findAll();
+  findAll(@Query() query) {
+    return this.staffService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id', new JoiValidationParamPipe(staffIdParamSchema))
+    id: string,
+  ) {
     return this.staffService.findOne(+id);
   }
 

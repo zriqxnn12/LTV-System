@@ -5,6 +5,7 @@ import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { Staff } from 'src/models/staff/entities/staff.entity';
+import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 
 @Injectable()
 export class StaffService {
@@ -15,28 +16,36 @@ export class StaffService {
     private staffModel: typeof Staff,
   ) {}
 
-  async create(createStaffDto: CreateStaffDto) {
-    const transaction = await this.sequelize.transaction();
+  async findAll(query: any) {
+    const { count, data } = await new QueryBuilderHelper(this.staffModel, query)
+      .load('user', 'teacher')
+      .getResult();
+
+    const result = {
+      count: count,
+      staffs: data,
+    };
+    return this.response.success(result, 200, 'Successfully retrieve staffs');
+  }
+
+  async findOne(id: number) {
     try {
-      const staff = await this.staffModel.create(
-        { ...createStaffDto },
-        { transaction },
-      );
-      await transaction.commit();
-      return this.response.success(staff, 201, 'Successfully create staff');
+      const staff = await this.staffModel.findOne({
+        where: { id },
+        include: [
+          {
+            association: 'user',
+          },
+          {
+            association: 'teacher',
+          },
+        ],
+      });
+
+      return this.response.success(staff, 200, 'Successfully retrieve staff');
     } catch (error) {
-      await transaction.rollback();
-      console.error('Error creating staff:', error);
-      return this.response.fail('Failed to create music staff', 400);
+      return this.response.fail('Failed retrieve staff', 400);
     }
-  }
-
-  findAll() {
-    return `This action returns all staff`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} staff`;
   }
 
   update(id: number, updateStaffDto: UpdateStaffDto) {

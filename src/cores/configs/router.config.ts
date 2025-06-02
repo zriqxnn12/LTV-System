@@ -15,6 +15,9 @@ import { FeedbackPublicModule } from 'src/features/public/feedback/feedback.modu
 import { ServiceInvoiceModule } from 'src/features/admin/service-invoice/service-invoice.module';
 import { ServiceInvoiceDocumentPublicModule } from 'src/features/public/service-invoice-document/service-invoice-document.module';
 import { ServiceInvoicePublicModule } from 'src/features/public/service-invoice/service-invoice.module';
+import { StudentModule } from 'src/features/admin/student/student.module';
+import { StaffModule } from 'src/features/admin/staff/staff.module';
+import { TeacherModule } from 'src/features/admin/teacher/teacher.module';
 
 export default RouterModule.register([
   {
@@ -30,6 +33,18 @@ export default RouterModule.register([
           {
             path: 'users',
             module: UserModule,
+          },
+          {
+            path: 'students',
+            module: StudentModule,
+          },
+          {
+            path: 'staffs',
+            module: StaffModule,
+          },
+          {
+            path: 'teachers',
+            module: TeacherModule,
           },
           {
             path: 'notifications',

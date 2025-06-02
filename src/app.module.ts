@@ -26,6 +26,7 @@ import { CoursePackageModule } from './features/admin/course-package/course-pack
 import { ServiceInvoiceModule } from './features/admin/service-invoice/service-invoice.module';
 import { ServiceInvoiceDocumentPublicModule } from './features/public/service-invoice-document/service-invoice-document.module';
 import { ServiceInvoicePublicModule } from './features/public/service-invoice/service-invoice.module';
+import { TeacherModule } from './features/admin/teacher/teacher.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ServiceInvoicePublicModule } from './features/public/service-invoice/se
     EventParticipantModule,
     ClassroomModule,
     StaffModule,
+    TeacherModule,
     StudentModule,
     FeedbackModule,
     CoursePackageModule,
