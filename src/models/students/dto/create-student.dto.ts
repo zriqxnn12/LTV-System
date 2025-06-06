@@ -7,10 +7,9 @@ export class CreateStudentDto {
   whatsapp_number: string;
   note: string;
   user?: {
-    name: string;
-    username: string;
-    email: string;
+    phone_no: string;
     address: string;
     birth_place: string;
+    birth_date: string;
   };
 }

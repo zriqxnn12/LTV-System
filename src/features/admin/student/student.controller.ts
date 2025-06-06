@@ -1,19 +1,20 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { UpdateStudentDto } from '../../../models/students/dto/update-student.dto';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
 import { studentIdParamSchema } from 'src/validators/params/student-id.param';
+import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
+import { createStudentSchema } from 'src/validators/requests/create-student.request';
+import { CreateStudentDto } from 'src/models/students/dto/create-student.dto';
 
 @Controller()
 export class StudentController {
@@ -29,8 +30,28 @@ export class StudentController {
   @Get(':id')
   findOne(
     @Param('id', new JoiValidationParamPipe(studentIdParamSchema))
-    id: string,
+    id: number,
   ) {
     return this.studentService.findOne(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  update(
+    @Param('id', new JoiValidationParamPipe(studentIdParamSchema))
+    id: number,
+    @Body(new JoiValidationPipe(createStudentSchema))
+    updateStudentDto: CreateStudentDto,
+  ) {
+    return this.studentService.update(id, updateStudentDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  remove(
+    @Param('id', new JoiValidationParamPipe(studentIdParamSchema))
+    id: string,
+  ) {
+    return this.studentService.delete(+id);
   }
 }
