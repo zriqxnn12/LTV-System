@@ -9,6 +9,7 @@ export const createStudentSchema = Joi.object({
   whatsapp_number: Joi.string().optional().allow(null, ''),
   note: Joi.string().optional(),
   user: Joi.object({
+    name: Joi.string().required(),
     phone_no: Joi.string().optional(),
     address: Joi.string().optional(),
     birth_place: Joi.string().optional().allow(null, ''),

@@ -89,6 +89,8 @@ export const registerSchema = Joi.object({
       ),
       description: Joi.string().optional().allow(null, ''),
       qualify: Joi.string().optional().allow(null, ''),
+      classroom_id: Joi.number().optional().allow(null),
+      branch_id: Joi.number().optional().allow(null),
     }).optional(),
   }).optional(),
   // student

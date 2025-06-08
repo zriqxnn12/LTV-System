@@ -76,10 +76,10 @@ export class StudentService {
       );
 
       if (createStudentDto.user && student.user) {
-        const { phone_no, address, birth_place, birth_date } =
+        const { name, phone_no, address, birth_place, birth_date } =
           createStudentDto.user;
         await student.user.update(
-          { phone_no, address, birth_place, birth_date },
+          { name, phone_no, address, birth_place, birth_date },
           { transaction },
         );
       }

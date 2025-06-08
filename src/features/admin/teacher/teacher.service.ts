@@ -21,10 +21,14 @@ export class TeacherService {
       this.teacherModel,
       query,
     )
-      .load({
-        association: 'staff',
-        include: [{ association: 'user' }],
-      })
+      .load(
+        {
+          association: 'staff',
+          include: [{ association: 'user' }],
+        },
+        'classroom',
+        'branch',
+      )
       .getResult();
 
     const result = {
@@ -47,6 +51,8 @@ export class TeacherService {
               },
             ],
           },
+          { association: 'classroom' },
+          { association: 'branch' },
         ],
       });
 

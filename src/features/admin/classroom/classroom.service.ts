@@ -39,7 +39,9 @@ export class ClassroomService {
     const { count, data } = await new QueryBuilderHelper(
       this.classroomModel,
       query,
-    ).getResult();
+    )
+      .load('branch')
+      .getResult();
 
     const result = {
       count: count,
@@ -56,6 +58,7 @@ export class ClassroomService {
     try {
       const classroom = await this.classroomModel.findOne({
         where: { id },
+        include: [{ association: 'branch' }],
       });
 
       return this.response.success(
@@ -69,10 +72,31 @@ export class ClassroomService {
   }
 
   async update(id: number, updateClassroomDto: UpdateClassroomDto) {
-    return `This action updates a #${id} classroom`;
+    const transaction = await this.sequelize.transaction();
+    try {
+      const classroom = await this.classroomModel.findByPk(id);
+      await classroom.update(updateClassroomDto, { transaction });
+      await transaction.commit();
+      return this.response.success(
+        classroom,
+        200,
+        'Successfully update classroom',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update classroom', 400);
+    }
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} classroom`;
+    const transaction = await this.sequelize.transaction();
+    try {
+      await this.classroomModel.destroy({ where: { id: id }, transaction });
+      await transaction.commit();
+      return this.response.success({}, 200, 'Successfully delete classroom');
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed delete classroom', 400);
+    }
   }
 }

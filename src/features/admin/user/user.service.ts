@@ -18,7 +18,25 @@ export class UserService {
 
   async findAll(query: any) {
     const { count, data } = await new QueryBuilderHelper(this.userModel, query)
-      .load('staff')
+      .load(
+        {
+          association: 'staff',
+          include: [
+            {
+              association: 'teacher',
+              include: [
+                {
+                  association: 'branch',
+                },
+                {
+                  association: 'classroom',
+                },
+              ],
+            },
+          ],
+        },
+        'student',
+      )
       .getResult();
 
     const result = {
@@ -33,7 +51,24 @@ export class UserService {
     try {
       const user = await this.userModel.findOne({
         where: { id },
-        include: [{ association: 'staff' }],
+        include: [
+          {
+            association: 'staff',
+            include: [
+              {
+                association: 'teacher',
+                include: [
+                  {
+                    association: 'branch',
+                  },
+                  {
+                    association: 'classroom',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       });
 
       return this.response.success(user, 200, 'Successfully retrieve users');
