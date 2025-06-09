@@ -77,6 +77,7 @@ export const teacherSchema = Joi.object({
       .required(),
     note: Joi.string().optional(),
     user: Joi.object({
+      name: Joi.string().required(),
       phone_no: Joi.string().optional(),
       address: Joi.string().optional(),
       birth_place: Joi.string().optional().allow(null, ''),
