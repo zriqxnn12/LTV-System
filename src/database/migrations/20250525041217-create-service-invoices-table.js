@@ -9,11 +9,11 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      user_id: {
+      student_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'students',
           key: 'id',
         },
       },

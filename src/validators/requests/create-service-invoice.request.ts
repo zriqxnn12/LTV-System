@@ -1,25 +1,26 @@
 import * as Joi from 'joi';
 import ServiceInvoiceStatus from 'src/models/service-invoices/enums/service-invoice-status.enum';
+import { Student } from 'src/models/students/entities/student.entity';
 import { User } from 'src/models/users/entities/user.entity';
 
 export const createServiceInvoiceSchema = Joi.object({
-  user_id: Joi.number()
+  student_id: Joi.number()
     .required()
     .external(async (value) => {
-      const user = await User.findOne({
+      const student = await Student.findOne({
         where: { id: value },
       });
-      if (!user) {
+      if (!student) {
         throw new Joi.ValidationError(
-          'any.user-not-found',
+          'any.student-not-found',
           [
             {
-              message: 'User not found',
-              path: ['user_id'],
-              type: 'any.user-not-found',
+              message: 'Student not found',
+              path: ['student_id'],
+              type: 'any.student-not-found',
               context: {
-                key: 'user_id',
-                label: 'user_id',
+                key: 'student_id',
+                label: 'student_id',
                 value,
               },
             },

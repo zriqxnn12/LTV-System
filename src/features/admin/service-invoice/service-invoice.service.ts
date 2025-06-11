@@ -71,8 +71,8 @@ export class ServiceInvoiceService {
       query,
     )
       .load('service_invoice_details', 'service_invoice_document', {
-        association: 'user',
-        include: [{ association: 'student' }],
+        association: 'student',
+        include: [{ association: 'user' }],
       })
       .getResult();
 
@@ -99,10 +99,10 @@ export class ServiceInvoiceService {
             association: 'service_invoice_document',
           },
           {
-            association: 'user',
+            association: 'student',
             include: [
               {
-                association: 'student',
+                association: 'user',
               },
             ],
           },

@@ -12,6 +12,7 @@ import { ServiceInvoiceDetail } from 'src/models/service-invoice-details/entitie
 import { User } from 'src/models/users/entities/user.entity';
 import { getServiceInvoiceStatusEnumLabel } from '../enums/service-invoice-status.enum';
 import { ServiceInvoiceDocument } from './service-invoice-document.entity';
+import { Student } from 'src/models/students/entities/student.entity';
 
 @Table({
   timestamps: true,
@@ -23,9 +24,9 @@ import { ServiceInvoiceDocument } from './service-invoice-document.entity';
   modelName: 'service_invoices',
 })
 export class ServiceInvoice extends Model {
-  @ForeignKey(() => User)
+  @ForeignKey(() => Student)
   @Column(DataType.BIGINT)
-  user_id: number;
+  student_id: number;
 
   @Column({ type: DataType.STRING, allowNull: false })
   invoice_no: string;
@@ -54,8 +55,8 @@ export class ServiceInvoice extends Model {
   @Column({ type: DataType.DECIMAL(16, 2), allowNull: false, defaultValue: 0 })
   grand_total: string;
 
-  @BelongsTo(() => User)
-  user: User;
+  @BelongsTo(() => Student)
+  student: Student;
 
   @HasOne(() => ServiceInvoiceDocument)
   service_invoice_document: ServiceInvoiceDocument;

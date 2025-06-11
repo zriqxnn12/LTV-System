@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
-import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
-import { CreateServiceInvoiceDto } from 'src/models/service-invoices/dto/create-service-invoice.dto';
-import { UpdateServiceInvoiceDto } from 'src/models/service-invoices/dto/update-service-invoice.dto';
 import { ServiceInvoice } from 'src/models/service-invoices/entities/service-invoice.entity';
 
 @Injectable()
@@ -19,9 +16,6 @@ export class ServiceInvoicePublicService {
   async findAll(query: any, user: any) {
     try {
       const { count, rows } = await this.serviceInvoiceModel.findAndCountAll({
-        where: {
-          user_id: user.id,
-        },
         include: [
           {
             association: 'service_invoice_details',
@@ -30,8 +24,12 @@ export class ServiceInvoicePublicService {
             association: 'service_invoice_document',
           },
           {
-            association: 'user',
-            include: [{ association: 'student' }],
+            association: 'student',
+            required: true,
+            where: {
+              user_id: user.id,
+            },
+            include: [{ association: 'user' }],
           },
         ],
         order: [['created_at', 'DESC']],
@@ -65,10 +63,10 @@ export class ServiceInvoicePublicService {
             association: 'service_invoice_document',
           },
           {
-            association: 'user',
+            association: 'student',
             include: [
               {
-                association: 'student',
+                association: 'user',
               },
             ],
           },

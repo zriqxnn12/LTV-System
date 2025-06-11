@@ -1,5 +1,5 @@
 export class CreateServiceInvoiceDto {
-  user_id: number;
+  student_id: number;
   invoice_no: string;
   status_name: string;
   status: number;
