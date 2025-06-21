@@ -157,8 +157,27 @@ export class ServiceInvoiceService {
   async update(id: number, updateServiceInvoiceDto: UpdateServiceInvoiceDto) {
     const transaction = await this.sequelize.transaction();
     try {
-      const invoice = await this.serviceInvoiceModel.findByPk(id);
+      const invoice = await this.serviceInvoiceModel.findByPk(id, {
+        include: [{ association: 'service_invoice_details' }],
+      });
       await invoice.update(updateServiceInvoiceDto, { transaction });
+      if (updateServiceInvoiceDto.service_invoice_details) {
+        // delete old detail data
+        await this.serviceInvoiceDetailModel.destroy({
+          where: { service_invoice_id: id },
+          transaction,
+        });
+        // add new detail
+        const newDetails = updateServiceInvoiceDto.service_invoice_details.map(
+          (detail) => ({
+            ...detail,
+            service_invoice_id: id,
+          }),
+        );
+        await this.serviceInvoiceDetailModel.bulkCreate(newDetails, {
+          transaction,
+        });
+      }
       await transaction.commit();
       return this.response.success(
         invoice,
