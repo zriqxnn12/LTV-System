@@ -154,6 +154,41 @@ export class ServiceInvoiceService {
     }
   }
 
+  async updateStatusToCancelled(invoiceId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const invoice = await this.serviceInvoiceModel.findOne({
+        where: {
+          id: invoiceId,
+          status: ServiceInvoiceStatus.CANCELLED,
+        },
+        include: [
+          {
+            model: ServiceInvoiceDocument,
+          },
+        ],
+        transaction,
+      });
+
+      await this.serviceInvoiceModel.update(
+        { status: ServiceInvoiceStatus.CANCELLED },
+        {
+          where: { id: invoiceId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(
+        null,
+        200,
+        'Service invoice status successfully updated to Cancelled',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
+    }
+  }
+
   async update(id: number, updateServiceInvoiceDto: UpdateServiceInvoiceDto) {
     const transaction = await this.sequelize.transaction();
     try {

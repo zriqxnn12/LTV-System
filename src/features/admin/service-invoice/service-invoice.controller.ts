@@ -48,12 +48,21 @@ export class ServiceInvoiceController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id/status/approve')
+  @Put(':id/approve')
   updateStatusToApproved(
     @Param('id', new JoiValidationParamPipe(serviceInvoiceIdParamSchema))
     id: number,
   ) {
     return this.serviceInvoiceService.updateStatusToApproved(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id/cancel')
+  updateStatusToCancelled(
+    @Param('id', new JoiValidationParamPipe(serviceInvoiceIdParamSchema))
+    id: number,
+  ) {
+    return this.serviceInvoiceService.updateStatusToCancelled(id);
   }
 
   @Put(':id')
