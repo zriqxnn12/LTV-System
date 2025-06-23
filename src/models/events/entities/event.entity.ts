@@ -1,5 +1,6 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import { ResizeOption } from 'src/cores/helpers/sharp.helper';
+import { getEventTypeEnumLabel } from '../enums/event-type.enum';
 
 @Table({
   timestamps: true,
@@ -20,7 +21,12 @@ export class Event extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   address: string;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({
+    type: DataType.VIRTUAL,
+    get(this: Event) {
+      return getEventTypeEnumLabel(this.getDataValue('type'));
+    },
+  })
   type_name: string;
 
   @Column({ type: DataType.DATE, allowNull: false })
@@ -29,7 +35,11 @@ export class Event extends Model {
   @Column({ type: DataType.INTEGER, allowNull: false })
   quota: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: false })
+  @Column({
+    type: DataType.TINYINT,
+    allowNull: false,
+    defaultValue: 0,
+  })
   type: number;
 
   @Column({
