@@ -18,6 +18,8 @@ import { ServiceInvoicePublicModule } from 'src/features/public/service-invoice/
 import { StudentModule } from 'src/features/admin/student/student.module';
 import { StaffModule } from 'src/features/admin/staff/staff.module';
 import { TeacherModule } from 'src/features/admin/teacher/teacher.module';
+import { EventPublicModule } from 'src/features/public/event/event.module';
+import { EventParticipantPublicModule } from 'src/features/public/event-participant/event-participant.module';
 
 export default RouterModule.register([
   {
@@ -100,6 +102,16 @@ export default RouterModule.register([
           {
             path: 'feedbacks',
             module: FeedbackPublicModule,
+          },
+          {
+            path: 'events',
+            module: EventPublicModule,
+            children: [
+              {
+                path: ':eventId/participants',
+                module: EventParticipantPublicModule,
+              },
+            ],
           },
           {
             path: 'service-invoices',

@@ -27,6 +27,8 @@ import { ServiceInvoiceModule } from './features/admin/service-invoice/service-i
 import { ServiceInvoiceDocumentPublicModule } from './features/public/service-invoice-document/service-invoice-document.module';
 import { ServiceInvoicePublicModule } from './features/public/service-invoice/service-invoice.module';
 import { TeacherModule } from './features/admin/teacher/teacher.module';
+import { EventPublicModule } from './features/public/event/event.module';
+import { EventParticipantPublicModule } from './features/public/event-participant/event-participant.module';
 
 @Module({
   imports: [
@@ -61,6 +63,8 @@ import { TeacherModule } from './features/admin/teacher/teacher.module';
     FeedbackPublicModule,
     ServiceInvoicePublicModule,
     ServiceInvoiceDocumentPublicModule,
+    EventPublicModule,
+    EventParticipantPublicModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],
