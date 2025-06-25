@@ -8,7 +8,9 @@ import { EventParticipant } from 'src/models/event-participants/entities/event-p
 import { Event } from 'src/models/events/entities/event.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { S3Helper } from 'src/cores/helpers/s3.helper';
-import EventParticipantStatusEnum from 'src/models/event-participants/enums/event-participant-status.enum';
+import EventParticipantStatusEnum, {
+  getEventParticipantStatusEnumLabel,
+} from 'src/models/event-participants/enums/event-participant-status.enum';
 
 @Injectable()
 export class EventParticipantService {
@@ -29,6 +31,20 @@ export class EventParticipantService {
         transaction: transaction,
       });
       createEventParticipantDto.total = event.fee;
+
+      // set status based on is_paid
+      if (createEventParticipantDto.is_paid) {
+        createEventParticipantDto.status = EventParticipantStatusEnum.PAID;
+        createEventParticipantDto.status_name =
+          getEventParticipantStatusEnumLabel(EventParticipantStatusEnum.PAID);
+      } else {
+        createEventParticipantDto.status = EventParticipantStatusEnum.ACCEPTED;
+        createEventParticipantDto.status_name =
+          getEventParticipantStatusEnumLabel(
+            EventParticipantStatusEnum.ACCEPTED,
+          );
+      }
+
       const paidAt = createEventParticipantDto.is_paid ? new Date() : null;
       const eventParticipant = await this.eventParticipantModel.create(
         {

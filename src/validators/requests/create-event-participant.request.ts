@@ -28,11 +28,11 @@ export const createEventParticipantSchema = Joi.object({
         );
       }
     }),
-  status_name: Joi.number().optional(),
-  status: Joi.number().valid(
-    ...Object.values(EventParticipantStatusEnum).filter(
-      (v) => typeof v === 'number',
-    ),
-  ),
+  // status_name: Joi.number().optional(),
+  // status: Joi.number().valid(
+  //   ...Object.values(EventParticipantStatusEnum).filter(
+  //     (v) => typeof v === 'number',
+  //   ),
+  // ),
   is_paid: Joi.boolean().default(true).optional(),
 }).options({ abortEarly: false });

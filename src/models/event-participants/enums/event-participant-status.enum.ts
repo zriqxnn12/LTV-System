@@ -1,6 +1,6 @@
 enum EventParticipantStatusEnum {
   REQUEST_TO_JOIN = 0,
-  APPROVED = 1,
+  ACCEPTED = 1,
   REJECTED = 2,
   PAYMENT_REVIEW = 3,
   PAID = 4,
@@ -12,12 +12,12 @@ export const getEventParticipantStatusEnumLabel = (
   switch (courseTransactionStatusEnum) {
     case EventParticipantStatusEnum.REQUEST_TO_JOIN:
       return 'Request to join';
-    case EventParticipantStatusEnum.APPROVED:
+    case EventParticipantStatusEnum.ACCEPTED:
       return 'Accepted';
     case EventParticipantStatusEnum.REJECTED:
-      return 'Declined';
+      return 'Rejected';
     case EventParticipantStatusEnum.PAYMENT_REVIEW:
-      return 'Waiting Payment';
+      return 'Payment Review';
     case EventParticipantStatusEnum.PAID:
       return 'Paid';
     default:
