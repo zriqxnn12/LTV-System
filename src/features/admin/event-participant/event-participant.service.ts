@@ -129,6 +129,59 @@ export class EventParticipantService {
     }
   }
 
+  async updateStatusToAccept(participantId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const participant = await this.eventParticipantModel.findOne({
+        where: {
+          id: participantId,
+          status: EventParticipantStatusEnum.REQUEST_TO_JOIN,
+        },
+        transaction,
+      });
+
+      await this.eventParticipantModel.update(
+        { status: EventParticipantStatusEnum.ACCEPTED },
+        {
+          where: { id: participantId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(
+        null,
+        200,
+        'Participant updated to Accepted',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
+    }
+  }
+
+  async updateStatusToPaid(participantId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const participant = await this.eventParticipantModel.findOne({
+        where: {
+          id: participantId,
+          status: EventParticipantStatusEnum.PAYMENT_REVIEW,
+        },
+        transaction,
+      });
+
+      await this.eventParticipantModel.update(
+        { status: EventParticipantStatusEnum.PAID },
+        {
+          where: { id: participantId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(null, 200, 'Generate to paid success');
+    } catch (error) {}
+  }
+
   async delete(id: number, eventId: string) {
     const transaction = await this.sequelize.transaction();
     try {

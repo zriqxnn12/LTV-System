@@ -79,6 +79,24 @@ export class EventParticipantController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Put(':id/accept')
+  updateStatusToAccepted(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: number,
+  ) {
+    return this.eventParticipantService.updateStatusToAccept(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id/paid')
+  updateStatusToPaid(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: number,
+  ) {
+    return this.eventParticipantService.updateStatusToPaid(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(
     @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
