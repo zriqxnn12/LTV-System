@@ -179,7 +179,36 @@ export class EventParticipantService {
       );
       await transaction.commit();
       return this.response.success(null, 200, 'Generate to paid success');
-    } catch (error) {}
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
+    }
+  }
+
+  async updateStatusToRejected(participantId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const participant = await this.eventParticipantModel.findOne({
+        where: {
+          id: participantId,
+          status: EventParticipantStatusEnum.REQUEST_TO_JOIN,
+        },
+        transaction,
+      });
+
+      await this.eventParticipantModel.update(
+        { status: EventParticipantStatusEnum.REJECTED },
+        {
+          where: { id: participantId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(null, 200, 'Participant Rejected');
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
+    }
   }
 
   async delete(id: number, eventId: string) {

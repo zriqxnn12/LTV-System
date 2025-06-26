@@ -97,6 +97,15 @@ export class EventParticipantController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Put(':id/reject')
+  updateStatusToRejected(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: number,
+  ) {
+    return this.eventParticipantService.updateStatusToRejected(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(
     @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
