@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -35,4 +36,7 @@ export class CoursePackage extends Model {
 
   @Column({ type: DataType.STRING, allowNull: true })
   description: string;
+
+  @BelongsTo(() => Instrument)
+  instrument: Instrument;
 }

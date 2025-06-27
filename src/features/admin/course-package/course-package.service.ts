@@ -41,7 +41,9 @@ export class CoursePackageService {
     const { count, data } = await new QueryBuilderHelper(
       this.coursePackageModel,
       query,
-    ).getResult();
+    )
+      .load('instrument')
+      .getResult();
 
     const result = {
       count: count,
@@ -58,6 +60,7 @@ export class CoursePackageService {
     try {
       const user = await this.coursePackageModel.findOne({
         where: { id },
+        include: [{ association: 'instrument' }],
       });
 
       return this.response.success(

@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFeedbackDto } from '../../../models/feedbacks/dto/create-feedback.dto';
-import { UpdateFeedbackDto } from '../../../models/feedbacks/dto/update-feedback.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
@@ -35,6 +33,7 @@ export class FeedbackService {
     try {
       const feedback = await this.feedbackModel.findOne({
         where: { id },
+        include: [{ association: 'user' }],
       });
 
       return this.response.success(
