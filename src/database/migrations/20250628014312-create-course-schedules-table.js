@@ -3,60 +3,65 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('courses', {
+    await queryInterface.createTable('course_schedules', {
       id: {
         type: Sequelize.BIGINT,
         autoIncrement: true,
         primaryKey: true,
       },
-      student_id: {
+      course_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'students',
+          model: 'courses',
           key: 'id',
         },
       },
-      instrument_id: {
+      teacher_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'instruments',
+          model: 'teachers',
           key: 'id',
         },
       },
-      course_package_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        references: {
-          model: 'course_packages',
-          key: 'id',
-        },
-      },
-      music_genre_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        references: {
-          model: 'genres',
-          key: 'id',
-        },
-      },
-      branch_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        references: {
-          model: 'branches',
-          key: 'id',
-        },
-      },
-      is_active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      description: {
+      status_name: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+      },
+      status: {
+        type: Sequelize.TINYINT,
+        allowNull: false,
+      },
+      day: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      date_start: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      date_end: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      duration: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      start_time: {
+        type: Sequelize.TIME,
+        allowNull: false,
+      },
+      end_time: {
+        type: Sequelize.TIME,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -82,6 +87,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('courses');
+    await queryInterface.dropTable('course_schedules');
   },
 };

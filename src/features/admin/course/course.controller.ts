@@ -6,23 +6,33 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from '../../../models/courses/dto/create-course.dto';
 import { UpdateCourseDto } from '../../../models/courses/dto/update-course.dto';
+import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
+import { createCourseSchema } from 'src/validators/requests/create-course.request';
 
-@Controller('course')
+@Controller()
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createCourseDto: CreateCourseDto) {
+  create(
+    @Body(new JoiValidationPipe(createCourseSchema))
+    createCourseDto: CreateCourseDto,
+  ) {
     return this.courseService.create(createCourseDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.courseService.findAll();
+  findAll(@Query() query) {
+    return this.courseService.findAll(query);
   }
 
   @Get(':id')

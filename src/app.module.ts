@@ -29,6 +29,10 @@ import { ServiceInvoicePublicModule } from './features/public/service-invoice/se
 import { TeacherModule } from './features/admin/teacher/teacher.module';
 import { EventPublicModule } from './features/public/event/event.module';
 import { EventParticipantPublicModule } from './features/public/event-participant/event-participant.module';
+import { CourseModule } from './features/admin/course/course.module';
+import { CourseScheduleModule } from './features/admin/course-schedule/course-schedule.module';
+import { AttendanceModule } from './features/admin/attendance/attendance.module';
+import { CourseRescheduleModule } from './features/admin/course-reschedule/course-reschedule.module';
 
 @Module({
   imports: [
@@ -42,6 +46,7 @@ import { EventParticipantPublicModule } from './features/public/event-participan
     routerConfig,
     // admin
     AuthModule,
+    AttendanceModule,
     ResponseModule,
     UserModule,
     NotificationModule,
@@ -51,6 +56,9 @@ import { EventParticipantPublicModule } from './features/public/event-participan
     EventModule,
     EventParticipantModule,
     ClassroomModule,
+    CourseModule,
+    CourseScheduleModule,
+    CourseRescheduleModule,
     StaffModule,
     TeacherModule,
     StudentModule,

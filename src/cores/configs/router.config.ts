@@ -20,6 +20,8 @@ import { StaffModule } from 'src/features/admin/staff/staff.module';
 import { TeacherModule } from 'src/features/admin/teacher/teacher.module';
 import { EventPublicModule } from 'src/features/public/event/event.module';
 import { EventParticipantPublicModule } from 'src/features/public/event-participant/event-participant.module';
+import { CourseModule } from 'src/features/admin/course/course.module';
+import { CourseScheduleModule } from 'src/features/admin/course-schedule/course-schedule.module';
 
 export default RouterModule.register([
   {
@@ -89,6 +91,14 @@ export default RouterModule.register([
           {
             path: 'service-invoices',
             module: ServiceInvoiceModule,
+          },
+          {
+            path: 'courses',
+            module: CourseModule,
+          },
+          {
+            path: 'course-schedules',
+            module: CourseScheduleModule,
           },
         ],
       },

@@ -3,11 +3,14 @@ import {
   Column,
   DataType,
   ForeignKey,
+  HasMany,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { Branch } from 'src/models/branches/entities/branch.entity';
 import { CoursePackage } from 'src/models/course-packages/entities/course-package.entity';
+import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
 import { Instrument } from 'src/models/instruments/entities/instrument.entity';
 import { Genre } from 'src/models/music-genres/entities/music-genre.entity';
 import { Student } from 'src/models/students/entities/student.entity';
@@ -47,6 +50,9 @@ export class Course extends Model {
 
   @Column({ type: DataType.STRING, allowNull: false })
   description: string;
+
+  @HasMany(() => CourseSchedule)
+  course_schedule: CourseSchedule[];
 
   @BelongsTo(() => Student)
   student: Student;

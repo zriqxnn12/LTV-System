@@ -3,58 +3,33 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('courses', {
+    await queryInterface.createTable('attendances', {
       id: {
         type: Sequelize.BIGINT,
         autoIncrement: true,
         primaryKey: true,
       },
-      student_id: {
+      course_schedule_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'students',
+          model: 'course_schedules',
           key: 'id',
         },
       },
-      instrument_id: {
-        type: Sequelize.BIGINT,
+      status_name: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: {
-          model: 'instruments',
-          key: 'id',
-        },
       },
-      course_package_id: {
-        type: Sequelize.BIGINT,
+      status: {
+        type: Sequelize.TINYINT,
         allowNull: false,
-        references: {
-          model: 'course_packages',
-          key: 'id',
-        },
       },
-      music_genre_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        references: {
-          model: 'genres',
-          key: 'id',
-        },
+      file_path: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      branch_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        references: {
-          model: 'branches',
-          key: 'id',
-        },
-      },
-      is_active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      description: {
+      note: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -82,6 +57,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('courses');
+    await queryInterface.dropTable('attendances');
   },
 };
