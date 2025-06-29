@@ -10,6 +10,7 @@ import CourseScheduleStatusEnum, {
   getCourseScheduleStatusEnumLabel,
 } from 'src/models/course-schedules/enums/course-schedule-status.enum';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class CourseService {
@@ -68,6 +69,14 @@ export class CourseService {
   }
 
   async findAll(query: any) {
+    const { start_date, end_date } = query;
+    const start = start_date ? new Date(start_date) : undefined;
+    const end = end_date ? new Date(end_date) : undefined;
+
+    if (end) {
+      end.setHours(23, 59, 59, 999);
+    }
+
     const { count, data } = await new QueryBuilderHelper(
       this.courseModel,
       query,
@@ -75,6 +84,15 @@ export class CourseService {
       .load(
         {
           association: 'course_schedule',
+          where:
+            start && end
+              ? {
+                  date_start: {
+                    [Op.between]: [start, end],
+                  },
+                }
+              : undefined,
+          required: !!(start && end),
           include: [
             {
               association: 'teacher',

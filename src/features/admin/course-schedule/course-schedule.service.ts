@@ -6,6 +6,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
+import { Op, where } from 'sequelize';
 
 @Injectable()
 export class CourseScheduleService {
@@ -20,10 +21,44 @@ export class CourseScheduleService {
   }
 
   async findAll(query: any) {
+    const { start_date, end_date } = query;
+    const whereClause: any = {};
+    if (start_date && end_date) {
+      const start = new Date(start_date);
+      const end = new Date(end_date);
+      end.setHours(23, 59, 59, 999); // untuk mencakup sampai akhir hari
+      whereClause.date_start = {
+        [Op.between]: [start, end],
+      };
+    }
     const { count, data } = await new QueryBuilderHelper(
       this.courseScheduleModel,
       query,
-    ).getResult();
+    )
+      .where(whereClause)
+      .load(
+        {
+          association: 'course',
+          include: [
+            {
+              association: 'student',
+              include: [{ association: 'user' }],
+            },
+          ],
+        },
+        {
+          association: 'teacher',
+          include: [
+            {
+              association: 'staff',
+              include: [{ association: 'user' }],
+            },
+          ],
+        },
+        { association: 'attendance' },
+        { association: 'course_reschedule' },
+      )
+      .getResult();
 
     const result = {
       count: count,
@@ -32,12 +67,45 @@ export class CourseScheduleService {
     return this.response.success(
       result,
       200,
-      'Successfully retrieve course schedule',
+      'Successfully retrieve course schedules',
     );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} courseSchedule`;
+  async findOne(id: number) {
+    try {
+      const course = await this.courseScheduleModel.findOne({
+        where: { id },
+        include: [
+          {
+            association: 'course',
+            include: [
+              {
+                association: 'student',
+                include: [{ association: 'user' }],
+              },
+            ],
+          },
+          {
+            association: 'teacher',
+            include: [
+              {
+                association: 'staff',
+                include: [{ association: 'user' }],
+              },
+            ],
+          },
+          { association: 'attendance' },
+          { association: 'course_reschedule' },
+        ],
+      });
+      return this.response.success(
+        course,
+        200,
+        'Successfully retrieve course schedule',
+      );
+    } catch (error) {
+      return this.response.fail('Failed retrieve course schedule', 400);
+    }
   }
 
   update(id: number, updateCourseScheduleDto: UpdateCourseScheduleDto) {

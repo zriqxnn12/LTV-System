@@ -32,6 +32,6 @@ export const createAttendanceSchema = Joi.object({
   status: Joi.number().valid(
     ...Object.values(AttendanceStatusEnum).filter((v) => typeof v === 'number'),
   ),
-  file_path: Joi.string().optional(),
-  note: Joi.string().optional(),
+  file_path: Joi.string().required(),
+  note: Joi.string().required(),
 }).options({ abortEarly: false });

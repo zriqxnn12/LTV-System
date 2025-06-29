@@ -5,6 +5,7 @@ import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { Attendance } from 'src/models/attendances/entities/attendance.entity';
+import { S3Helper } from 'src/cores/helpers/s3.helper';
 
 @Injectable()
 export class AttendanceService {
@@ -24,8 +25,22 @@ export class AttendanceService {
     }
     const transaction = await this.sequelize.transaction();
     try {
+      const s3Helper = new S3Helper();
+      const uploadImage = await s3Helper.uploadFile(
+        file,
+        'attendance/image',
+        'public-read',
+      );
+
+      if (!uploadImage?.key) {
+        return this.response.fail('File upload failed', 400);
+      }
+
       const attendance = await this.attendanceModel.create(
-        { ...createAttendanceDto },
+        {
+          ...createAttendanceDto,
+          file_path: uploadImage.file_path,
+        },
         { transaction },
       );
       await transaction.commit();

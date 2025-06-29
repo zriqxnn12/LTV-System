@@ -13,6 +13,8 @@ import { CourseScheduleService } from './course-schedule.service';
 import { CreateCourseScheduleDto } from '../../../models/course-schedules/dto/create-course-schedule.dto';
 import { UpdateCourseScheduleDto } from '../../../models/course-schedules/dto/update-course-schedule.dto';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { courseScheduleIdParamSchema } from 'src/validators/params/course-schedule-id.param';
 
 @Controller()
 export class CourseScheduleController {
@@ -29,8 +31,12 @@ export class CourseScheduleController {
     return this.courseScheduleService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id', new JoiValidationParamPipe(courseScheduleIdParamSchema))
+    id: string,
+  ) {
     return this.courseScheduleService.findOne(+id);
   }
 
