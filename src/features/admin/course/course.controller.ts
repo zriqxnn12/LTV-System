@@ -15,6 +15,8 @@ import { UpdateCourseDto } from '../../../models/courses/dto/update-course.dto';
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
 import { createCourseSchema } from 'src/validators/requests/create-course.request';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { courseIdParamSchema } from 'src/validators/params/course-id.param';
 
 @Controller()
 export class CourseController {
@@ -35,8 +37,12 @@ export class CourseController {
     return this.courseService.findAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id', new JoiValidationParamPipe(courseIdParamSchema))
+    id: string,
+  ) {
     return this.courseService.findOne(+id);
   }
 

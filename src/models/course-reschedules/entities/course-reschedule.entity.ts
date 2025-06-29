@@ -23,7 +23,13 @@ export class CourseReschedule extends Model {
   course_schedule_id: number;
 
   @Column({ type: DataType.DATE, allowNull: false })
-  new_date: Date;
+  date: Date;
+
+  @Column({ type: DataType.DATE, allowNull: false })
+  date_start: Date;
+
+  @Column({ type: DataType.DATE, allowNull: false })
+  date_end: Date;
 
   @Column({ type: DataType.TIME, allowNull: false })
   start_time: string;

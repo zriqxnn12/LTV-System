@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { Classroom } from 'src/models/classrooms/entities/classroom.entity';
 import { CoursePackage } from 'src/models/course-packages/entities/course-package.entity';
 import CourseScheduleStatusEnum from 'src/models/course-schedules/enums/course-schedule-status.enum';
 import { Instrument } from 'src/models/instruments/entities/instrument.entity';
@@ -162,8 +163,33 @@ export const createCourseSchema = Joi.object({
             );
           }
         }),
+      classroom_id: Joi.number()
+        .required()
+        .external(async (value) => {
+          const classroom = await Classroom.findOne({
+            where: { id: value },
+          });
+          if (!classroom) {
+            throw new Joi.ValidationError(
+              'any.classroom-not-found',
+              [
+                {
+                  message: 'classroom not found',
+                  path: ['classroom_id'],
+                  type: 'any.classroom-not-found',
+                  context: {
+                    key: 'classroom_id',
+                    label: 'classroom_id',
+                    value,
+                  },
+                },
+              ],
+              value,
+            );
+          }
+        }),
       date: Joi.date().required(),
-      day: Joi.number().required(),
+      // day: Joi.number().required(),
       duration: Joi.number().required(),
       start_time: Joi.string().required(),
       end_time: Joi.string().required(),

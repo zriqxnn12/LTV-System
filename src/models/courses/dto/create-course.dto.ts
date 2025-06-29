@@ -10,6 +10,7 @@ export class CreateCourseDto {
   description: string;
   course_schedule: {
     teacher_id: number;
+    classroom_id: number;
     status_name?: string;
     status: CourseScheduleStatusEnum;
     duration: number;

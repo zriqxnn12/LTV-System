@@ -25,6 +25,14 @@ module.exports = {
           key: 'id',
         },
       },
+      classroom_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        references: {
+          model: 'classrooms',
+          key: 'id',
+        },
+      },
       status_name: {
         type: Sequelize.STRING,
         allowNull: false,

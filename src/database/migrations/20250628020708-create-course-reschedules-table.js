@@ -17,7 +17,15 @@ module.exports = {
           key: 'id',
         },
       },
-      new_date: {
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      date_start: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      date_end: {
         type: Sequelize.DATE,
         allowNull: false,
       },

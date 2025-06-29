@@ -12,6 +12,7 @@ import { CourseReschedule } from 'src/models/course-reschedules/entities/course-
 import { Course } from 'src/models/courses/entities/course.entity';
 import { Teacher } from 'src/models/staff/entities/teacher.entity';
 import { getCourseScheduleStatusEnumLabel } from '../enums/course-schedule-status.enum';
+import { Classroom } from 'src/models/classrooms/entities/classroom.entity';
 
 @Table({
   timestamps: true,
@@ -30,6 +31,10 @@ export class CourseSchedule extends Model {
   @ForeignKey(() => Teacher)
   @Column(DataType.BIGINT)
   teacher_id: number;
+
+  @ForeignKey(() => Classroom)
+  @Column(DataType.BIGINT)
+  classroom_id: number;
 
   @Column({
     type: DataType.VIRTUAL,
@@ -78,4 +83,7 @@ export class CourseSchedule extends Model {
 
   @BelongsTo(() => Teacher)
   teacher: Teacher;
+
+  @BelongsTo(() => Classroom)
+  classroom: Classroom;
 }

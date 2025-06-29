@@ -1,6 +1,7 @@
 enum AttendanceStatusEnum {
   PRESENT = 0,
   LATE = 1,
+  ALPHA = 2,
 }
 
 export const getAttendanceStatusEnumLabel = (
@@ -11,6 +12,8 @@ export const getAttendanceStatusEnumLabel = (
       return 'Present';
     case AttendanceStatusEnum.LATE:
       return 'Late';
+    case AttendanceStatusEnum.ALPHA:
+      return 'Alpha';
     default:
       return 'Unknown';
   }

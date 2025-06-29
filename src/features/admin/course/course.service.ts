@@ -44,6 +44,7 @@ export class CourseService {
 
         const dateEnd = new Date(schedule.date);
         dateEnd.setHours(endHour, endMin, 0, 0); // waktu lokal
+        const day = new Date(schedule.date).getDay(); // 0 (Sunday) to 6 (Saturday)
         await this.courseScheduleModel.create(
           {
             ...schedule,
@@ -52,6 +53,7 @@ export class CourseService {
             status_name: defaultStatusName,
             date_start: dateStart,
             date_end: dateEnd,
+            day,
           },
           { transaction },
         );
@@ -71,10 +73,6 @@ export class CourseService {
       query,
     )
       .load(
-        'course_package',
-        'instrument',
-        'music_genre',
-        'branch',
         {
           association: 'course_schedule',
           include: [
@@ -87,8 +85,15 @@ export class CourseService {
                 },
               ],
             },
+            { association: 'classroom' },
+            { association: 'attendance' },
+            { association: 'course_reschedule' },
           ],
         },
+        'course_package',
+        'instrument',
+        'music_genre',
+        'branch',
         {
           association: 'student',
           include: [{ association: 'user' }],
@@ -103,8 +108,42 @@ export class CourseService {
     return this.response.success(result, 200, 'Successfully retrieve courses');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(id: number) {
+    try {
+      const course = await this.courseModel.findOne({
+        where: { id },
+        include: [
+          {
+            association: 'course_schedule',
+            include: [
+              {
+                association: 'teacher',
+                include: [
+                  {
+                    association: 'staff',
+                    include: [{ association: 'user' }],
+                  },
+                ],
+              },
+              { association: 'classroom' },
+              { association: 'attendance' },
+              { association: 'course_reschedule' },
+            ],
+          },
+          { association: 'course_package' },
+          { association: 'instrument' },
+          { association: 'music_genre' },
+          { association: 'branch' },
+          {
+            association: 'student',
+            include: [{ association: 'user' }],
+          },
+        ],
+      });
+      return this.response.success(course, 200, 'Successfully retrieve course');
+    } catch (error) {
+      return this.response.fail('Failed retrieve course', 400);
+    }
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {
