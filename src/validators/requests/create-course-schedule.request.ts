@@ -61,7 +61,7 @@ export const createCourseScheduleSchema = Joi.object({
     ),
   ),
   date: Joi.date().required(),
-  day: Joi.number().required(),
+  duration: Joi.number().required(),
   start_time: Joi.string().required(),
   end_time: Joi.string().required(),
 }).options({ abortEarly: false });

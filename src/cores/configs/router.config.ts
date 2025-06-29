@@ -22,6 +22,7 @@ import { EventPublicModule } from 'src/features/public/event/event.module';
 import { EventParticipantPublicModule } from 'src/features/public/event-participant/event-participant.module';
 import { CourseModule } from 'src/features/admin/course/course.module';
 import { CourseScheduleModule } from 'src/features/admin/course-schedule/course-schedule.module';
+import { CourseSchedulePublicModule } from 'src/features/public/course-schedule/course-schedule.module';
 
 export default RouterModule.register([
   {
@@ -132,6 +133,10 @@ export default RouterModule.register([
                 module: ServiceInvoiceDocumentPublicModule,
               },
             ],
+          },
+          {
+            path: 'course-schedules',
+            module: CourseSchedulePublicModule,
           },
         ],
       },
