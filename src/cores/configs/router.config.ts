@@ -23,6 +23,8 @@ import { EventParticipantPublicModule } from 'src/features/public/event-particip
 import { CourseModule } from 'src/features/admin/course/course.module';
 import { CourseScheduleModule } from 'src/features/admin/course-schedule/course-schedule.module';
 import { CourseSchedulePublicModule } from 'src/features/public/course-schedule/course-schedule.module';
+import { AttendancePublicModule } from 'src/features/public/attendance/attendance.module';
+import { CourseReschedulePublicModule } from 'src/features/public/course-reschedule/course-reschedule.module';
 
 export default RouterModule.register([
   {
@@ -137,6 +139,16 @@ export default RouterModule.register([
           {
             path: 'course-schedules',
             module: CourseSchedulePublicModule,
+            children: [
+              {
+                path: ':courseScheduleId/attendances',
+                module: AttendancePublicModule,
+              },
+              {
+                path: ':courseScheduleId/reschedules',
+                module: CourseReschedulePublicModule,
+              },
+            ],
           },
         ],
       },

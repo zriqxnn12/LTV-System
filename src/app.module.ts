@@ -34,6 +34,8 @@ import { CourseScheduleModule } from './features/admin/course-schedule/course-sc
 import { AttendanceModule } from './features/admin/attendance/attendance.module';
 import { CourseRescheduleModule } from './features/admin/course-reschedule/course-reschedule.module';
 import { CourseSchedulePublicModule } from './features/public/course-schedule/course-schedule.module';
+import { AttendancePublicModule } from './features/public/attendance/attendance.module';
+import { CourseReschedulePublicModule } from './features/public/course-reschedule/course-reschedule.module';
 
 @Module({
   imports: [
@@ -69,12 +71,14 @@ import { CourseSchedulePublicModule } from './features/public/course-schedule/co
 
     // public
     AuthPublicModule,
+    AttendancePublicModule,
     FeedbackPublicModule,
     ServiceInvoicePublicModule,
     ServiceInvoiceDocumentPublicModule,
     EventPublicModule,
     EventParticipantPublicModule,
     CourseSchedulePublicModule,
+    CourseReschedulePublicModule,
   ],
   controllers: [AppController],
   providers: [AppService, NotificationListener],
