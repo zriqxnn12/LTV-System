@@ -7,6 +7,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { Op, where } from 'sequelize';
+import CourseScheduleStatusEnum, {
+  getCourseScheduleStatusEnumLabel,
+} from 'src/models/course-schedules/enums/course-schedule-status.enum';
 
 @Injectable()
 export class CourseScheduleService {
@@ -16,8 +19,47 @@ export class CourseScheduleService {
     @InjectModel(CourseSchedule)
     private courseScheduleModel: typeof CourseSchedule,
   ) {}
-  create(createCourseScheduleDto: CreateCourseScheduleDto) {
-    return 'This action adds a new courseSchedule';
+
+  async create(createCourseScheduleDto: CreateCourseScheduleDto) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const { date, start_time, duration, ...rest } = createCourseScheduleDto;
+
+      const dateStart = new Date(`${date}T${start_time}:00.000Z`);
+      const dateEnd = new Date(dateStart.getTime() + duration * 60000);
+      const day = dateStart.getUTCDay();
+
+      const schedule = await this.courseScheduleModel.create(
+        {
+          ...rest,
+          date,
+          duration,
+          start_time,
+          end_time: createCourseScheduleDto.end_time,
+          date_start: dateStart,
+          date_end: dateEnd,
+          day,
+
+          // Default values for status
+          status: CourseScheduleStatusEnum.SCHEDULED,
+          status_name: getCourseScheduleStatusEnumLabel(
+            CourseScheduleStatusEnum.SCHEDULED,
+          ),
+        },
+        { transaction },
+      );
+
+      await transaction.commit();
+      return this.response.success(
+        schedule,
+        201,
+        'Successfully create course schedule',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error creating course schedule:', error);
+      return this.response.fail('Failed to create course schedule', 400);
+    }
   }
 
   async findAll(query: any) {

@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { Classroom } from 'src/models/classrooms/entities/classroom.entity';
 import CourseScheduleStatusEnum from 'src/models/course-schedules/enums/course-schedule-status.enum';
 import { Course } from 'src/models/courses/entities/course.entity';
 import { Teacher } from 'src/models/staff/entities/teacher.entity';
@@ -54,12 +55,37 @@ export const createCourseScheduleSchema = Joi.object({
         );
       }
     }),
-  status_name: Joi.string().optional(),
-  status: Joi.number().valid(
-    ...Object.values(CourseScheduleStatusEnum).filter(
-      (v) => typeof v === 'number',
-    ),
-  ),
+  classroom_id: Joi.number()
+    .required()
+    .external(async (value) => {
+      const classroom = await Classroom.findOne({
+        where: { id: value },
+      });
+      if (!classroom) {
+        throw new Joi.ValidationError(
+          'any.classroom-not-found',
+          [
+            {
+              message: 'classroom not found',
+              path: ['classroom_id'],
+              type: 'any.classroom-not-found',
+              context: {
+                key: 'classroom_id',
+                label: 'classroom_id',
+                value,
+              },
+            },
+          ],
+          value,
+        );
+      }
+    }),
+  // status_name: Joi.string().optional(),
+  // status: Joi.number().valid(
+  //   ...Object.values(CourseScheduleStatusEnum).filter(
+  //     (v) => typeof v === 'number',
+  //   ),
+  // ),
   date: Joi.date().required(),
   duration: Joi.number().required(),
   start_time: Joi.string().required(),

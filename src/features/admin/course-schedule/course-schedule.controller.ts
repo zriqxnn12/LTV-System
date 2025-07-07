@@ -15,13 +15,19 @@ import { UpdateCourseScheduleDto } from '../../../models/course-schedules/dto/up
 import { JwtAuthGuard } from 'src/cores/guards/jwt-auth.guard';
 import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
 import { courseScheduleIdParamSchema } from 'src/validators/params/course-schedule-id.param';
+import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
+import { createCourseScheduleSchema } from 'src/validators/requests/create-course-schedule.request';
 
 @Controller()
 export class CourseScheduleController {
   constructor(private readonly courseScheduleService: CourseScheduleService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createCourseScheduleDto: CreateCourseScheduleDto) {
+  create(
+    @Body(new JoiValidationPipe(createCourseScheduleSchema))
+    createCourseScheduleDto: CreateCourseScheduleDto,
+  ) {
     return this.courseScheduleService.create(createCourseScheduleDto);
   }
 
