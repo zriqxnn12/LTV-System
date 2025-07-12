@@ -25,23 +25,23 @@ export class AuthPublicService {
 
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
-    const getUser = await this.userModel.findByPk(user.id, {
-      include: [
-        {
-          model: this.studentModel,
-        },
-        {
-          model: this.staffModel,
-          include: [
-            {
-              model: this.teacherModel,
-            },
-          ],
-        },
-      ],
-    });
+    // const getUser = await this.userModel.findByPk(user.id, {
+    //   include: [
+    //     {
+    //       model: this.studentModel,
+    //     },
+    //     {
+    //       model: this.staffModel,
+    //       include: [
+    //         {
+    //           model: this.teacherModel,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // });
     const result = {
-      getUser,
+      user,
       access_token: this.jwtService.sign(payload),
     };
     return this.response.success(result, 200);
