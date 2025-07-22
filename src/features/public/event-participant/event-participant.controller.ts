@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
+  Query,
 } from '@nestjs/common';
 import { EventParticipantPublicService } from './event-participant.service';
 import { CreateEventParticipantDto } from 'src/models/event-participants/dto/create-event-participant.dto';
@@ -52,14 +53,25 @@ export class EventParticipantPublicController {
     return this.eventParticipantService.updateImage(id, file, eventId);
   }
 
+  @UseGuards(JwtPublicAuthGuard)
   @Get()
-  findAll() {
-    return this.eventParticipantService.findAll();
+  findAll(
+    @Query() query,
+    @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
+    eventId: string,
+  ) {
+    return this.eventParticipantService.findAll(query, eventId);
   }
 
+  @UseGuards(JwtPublicAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.eventParticipantService.findOne(+id);
+  findOne(
+    @Param('id', new JoiValidationParamPipe(eventParticipantIdParamSchema))
+    id: string,
+    @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
+    eventId: string,
+  ) {
+    return this.eventParticipantService.findOne(+id, eventId);
   }
 
   @Patch(':id')

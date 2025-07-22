@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
+import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { S3Helper } from 'src/cores/helpers/s3.helper';
 import { CreateEventParticipantDto } from 'src/models/event-participants/dto/create-event-participant.dto';
@@ -88,12 +89,40 @@ export class EventParticipantPublicService {
     }
   }
 
-  findAll() {
-    return `This action returns all eventParticipant`;
+  async findAll(query: any, eventId: string) {
+    const { count, data } = await new QueryBuilderHelper(
+      this.eventParticipantModel,
+      query,
+    )
+      .where({ event_id: +eventId })
+      .load('user', 'event')
+      .getResult();
+
+    const result = {
+      count: count,
+      event_participants: data,
+    };
+    return this.response.success(
+      result,
+      200,
+      'Successfully retrieve event participants',
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} eventParticipant`;
+  async findOne(id: number, eventId: string) {
+    try {
+      const eventParticipant = await this.eventParticipantModel.findOne({
+        where: { id: id, event_id: +eventId },
+        include: ['user', 'event'],
+      });
+      return this.response.success(
+        eventParticipant,
+        200,
+        'Successfully retrieve event participant',
+      );
+    } catch (error) {
+      return this.response.fail(error, 400);
+    }
   }
 
   update(id: number, updateEventParticipantDto: UpdateEventParticipantDto) {
