@@ -89,12 +89,12 @@ export class EventParticipantPublicService {
     }
   }
 
-  async findAll(query: any, eventId: string) {
+  async findAll(query: any, eventId: string, userId: number) {
     const { count, data } = await new QueryBuilderHelper(
       this.eventParticipantModel,
       query,
     )
-      .where({ event_id: +eventId })
+      .where({ event_id: +eventId, user_id: userId })
       .load('user', 'event')
       .getResult();
 

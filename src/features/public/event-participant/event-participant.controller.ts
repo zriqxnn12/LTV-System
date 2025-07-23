@@ -11,6 +11,7 @@ import {
   UploadedFile,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 import { EventParticipantPublicService } from './event-participant.service';
 import { CreateEventParticipantDto } from 'src/models/event-participants/dto/create-event-participant.dto';
@@ -56,11 +57,12 @@ export class EventParticipantPublicController {
   @UseGuards(JwtPublicAuthGuard)
   @Get()
   findAll(
+    @Req() req,
     @Query() query,
     @Param('eventId', new JoiValidationParamPipe(eventIdParamSchema))
     eventId: string,
   ) {
-    return this.eventParticipantService.findAll(query, eventId);
+    return this.eventParticipantService.findAll(query, eventId, req.user.id);
   }
 
   @UseGuards(JwtPublicAuthGuard)
