@@ -25,6 +25,7 @@ import { CourseScheduleModule } from 'src/features/admin/course-schedule/course-
 import { CourseSchedulePublicModule } from 'src/features/public/course-schedule/course-schedule.module';
 import { AttendancePublicModule } from 'src/features/public/attendance/attendance.module';
 import { CourseReschedulePublicModule } from 'src/features/public/course-reschedule/course-reschedule.module';
+import { ParticipantPublicModule } from 'src/features/public/participant/participant.module';
 
 export default RouterModule.register([
   {
@@ -125,6 +126,11 @@ export default RouterModule.register([
                 module: EventParticipantPublicModule,
               },
             ],
+          },
+          // for portal FE on purpose
+          {
+            path: 'event-participants',
+            module: ParticipantPublicModule,
           },
           {
             path: 'service-invoices',

@@ -36,6 +36,7 @@ import { CourseRescheduleModule } from './features/admin/course-reschedule/cours
 import { CourseSchedulePublicModule } from './features/public/course-schedule/course-schedule.module';
 import { AttendancePublicModule } from './features/public/attendance/attendance.module';
 import { CourseReschedulePublicModule } from './features/public/course-reschedule/course-reschedule.module';
+import { ParticipantPublicModule } from './features/public/participant/participant.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { CourseReschedulePublicModule } from './features/public/course-reschedul
     ServiceInvoicePublicModule,
     ServiceInvoiceDocumentPublicModule,
     EventPublicModule,
+    ParticipantPublicModule,
     EventParticipantPublicModule,
     CourseSchedulePublicModule,
     CourseReschedulePublicModule,
