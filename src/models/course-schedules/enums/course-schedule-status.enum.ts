@@ -3,6 +3,7 @@ enum CourseScheduleStatusEnum {
   ON_PROGRESS = 1,
   RESCHEDULED = 2,
   COMPLETED = 3,
+  ABSENT = 4,
 }
 
 export const getCourseScheduleStatusEnumLabel = (
@@ -17,6 +18,8 @@ export const getCourseScheduleStatusEnumLabel = (
       return 'Rescheduled';
     case CourseScheduleStatusEnum.COMPLETED:
       return 'Completed';
+    case CourseScheduleStatusEnum.ABSENT:
+      return 'Absent';
     default:
       return 'Unknown';
   }

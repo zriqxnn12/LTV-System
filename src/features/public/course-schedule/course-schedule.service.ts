@@ -6,6 +6,7 @@ import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
 import { UpdateCourseScheduleDto } from 'src/models/course-schedules/dto/update-course-schedule.dto';
 import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
+import CourseScheduleStatusEnum from 'src/models/course-schedules/enums/course-schedule-status.enum';
 import { Teacher } from 'src/models/staff/entities/teacher.entity';
 import { Student } from 'src/models/students/entities/student.entity';
 
@@ -193,11 +194,33 @@ export class CourseSchedulePublicService {
     }
   }
 
-  update(id: number, updateCourseScheduleDto: UpdateCourseScheduleDto) {
-    return `This action updates a #${id} courseSchedule`;
-  }
+  async generateToOnProgress(courseScheduleId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const course = await this.courseScheduleModel.findOne({
+        where: {
+          id: courseScheduleId,
+          status: CourseScheduleStatusEnum.SCHEDULED,
+        },
+        transaction,
+      });
 
-  remove(id: number) {
-    return `This action removes a #${id} courseSchedule`;
+      await this.courseScheduleModel.update(
+        { status: CourseScheduleStatusEnum.ON_PROGRESS },
+        {
+          where: { id: courseScheduleId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(
+        null,
+        200,
+        'Course schedule status successfully updated',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
+    }
   }
 }
