@@ -38,8 +38,8 @@ export class CourseSchedule extends Model {
 
   @Column({
     type: DataType.VIRTUAL,
-    get(this: CourseReschedule) {
-      return getCourseScheduleStatusEnumLabel(this.getDataValue('status'));
+    get(this: CourseSchedule) {
+      return getCourseScheduleStatusEnumLabel(this.status);
     },
   })
   status_name: string;

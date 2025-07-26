@@ -6,7 +6,9 @@ import { S3Helper } from 'src/cores/helpers/s3.helper';
 import { CreateAttendanceDto } from 'src/models/attendances/dto/create-attendance.dto';
 import { UpdateAttendanceDto } from 'src/models/attendances/dto/update-attendance.dto';
 import { Attendance } from 'src/models/attendances/entities/attendance.entity';
+import AttendanceStatusEnum from 'src/models/attendances/enums/attendance-status.enum';
 import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
+import CourseScheduleStatusEnum from 'src/models/course-schedules/enums/course-schedule-status.enum';
 
 @Injectable()
 export class AttendancePublicService {
@@ -49,9 +51,16 @@ export class AttendancePublicService {
         { transaction },
       );
 
-      // Update status course schedule ke COMPLETED (3)
+      const statusNum = +createAttendanceDto.status;
+      // Tentukan status course schedule berdasarkan status attendance
+      let courseScheduleStatusToUpdate = CourseScheduleStatusEnum.COMPLETED;
+
+      if (statusNum === AttendanceStatusEnum.ALPHA) {
+        courseScheduleStatusToUpdate = CourseScheduleStatusEnum.ABSENT;
+      }
+
       await this.courseScheduleModel.update(
-        { status: 3 },
+        { status: courseScheduleStatusToUpdate },
         {
           where: { id: courseScheduleId },
           transaction,
