@@ -53,6 +53,7 @@ export class CourseSchedulePublicService {
           },
         ],
       },
+      { association: 'classroom' },
       { association: 'attendance' },
       { association: 'course_reschedule' },
     ];
@@ -101,6 +102,7 @@ export class CourseSchedulePublicService {
                 },
               ],
             },
+            { association: 'instrument' },
           ],
         },
         ...baseIncludes,
@@ -138,8 +140,10 @@ export class CourseSchedulePublicService {
                 },
               ],
             },
+            { association: 'instrument' },
           ],
         },
+        { association: 'classroom' },
         { association: 'attendance' },
         { association: 'course_reschedule' },
       );
