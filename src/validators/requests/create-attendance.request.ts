@@ -1,6 +1,5 @@
 import * as Joi from 'joi';
 import AttendanceStatusEnum from 'src/models/attendances/enums/attendance-status.enum';
-import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
 
 export const createAttendanceSchema = Joi.object({
   status_name: Joi.string().optional(),

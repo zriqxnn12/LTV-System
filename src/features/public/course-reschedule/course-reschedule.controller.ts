@@ -12,6 +12,10 @@ import { CreateCourseRescheduleDto } from 'src/models/course-reschedules/dto/cre
 import { UpdateCourseRescheduleDto } from 'src/models/course-reschedules/dto/update-course-reschedule.dto';
 import { JwtPublicAuthGuard } from 'src/cores/guards/jwt-public-auth.guard';
 import { CourseReschedulePublicService } from './course-reschedule.service';
+import { JoiValidationPipe } from 'src/cores/validators/pipes/joi-validation.pipe';
+import { courseRescheduleIdParamSchema } from 'src/validators/params/course-reschedule-id.param';
+import { JoiValidationParamPipe } from 'src/cores/validators/pipes/joi-validation-param.pipe';
+import { createCourseRescheduleSchema } from 'src/validators/requests/create-course-reschedule.request';
 
 @Controller()
 export class CourseReschedulePublicController {
@@ -21,10 +25,19 @@ export class CourseReschedulePublicController {
 
   @UseGuards(JwtPublicAuthGuard)
   @Post()
-  create(@Body() createCourseRescheduleDto: CreateCourseRescheduleDto) {
-    return this.courseRescheduleService.create(createCourseRescheduleDto);
+  create(
+    @Param('courseScheduleId')
+    courseScheduleId: number,
+    @Body(new JoiValidationPipe(createCourseRescheduleSchema))
+    createCourseRescheduleDto: CreateCourseRescheduleDto,
+  ) {
+    return this.courseRescheduleService.create(
+      courseScheduleId,
+      createCourseRescheduleDto,
+    );
   }
 
+  @UseGuards(JwtPublicAuthGuard)
   @Get()
   findAll() {
     return this.courseRescheduleService.findAll();

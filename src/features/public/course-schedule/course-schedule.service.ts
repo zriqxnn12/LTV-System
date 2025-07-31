@@ -204,7 +204,12 @@ export class CourseSchedulePublicService {
       const course = await this.courseScheduleModel.findOne({
         where: {
           id: courseScheduleId,
-          status: CourseScheduleStatusEnum.SCHEDULED,
+          status: {
+            [Op.in]: [
+              CourseScheduleStatusEnum.SCHEDULED,
+              CourseScheduleStatusEnum.RESCHEDULED,
+            ],
+          },
         },
         transaction,
       });
