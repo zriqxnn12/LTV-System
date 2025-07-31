@@ -50,7 +50,15 @@ export class CourseReschedulePublicService {
       );
 
       await courseSchedule.update(
-        { status: CourseScheduleStatusEnum.RESCHEDULED },
+        {
+          status: CourseScheduleStatusEnum.RESCHEDULED,
+          date,
+          date_start: dateStart,
+          date_end: dateEnd,
+          start_time,
+          end_time,
+          day: new Date(date).getDay(),
+        },
         { transaction },
       );
 
