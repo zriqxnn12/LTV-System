@@ -58,11 +58,11 @@ export class CourseReschedulePublicService {
       return this.response.success(
         reschedule,
         201,
-        'Successfully create classroom',
+        'Successfully create reschedule',
       );
     } catch (error) {
       await transaction.rollback();
-      return this.response.fail('Failed to create classroom', 400);
+      return this.response.fail('Failed to create reschedule', 400);
     }
   }
 
