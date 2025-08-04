@@ -136,63 +136,62 @@ export const createCourseSchema = Joi.object({
   is_active: Joi.boolean().default(true).optional(),
   description: Joi.string().optional(),
   // course schedule
-  course_schedule: Joi.array().items(
-    Joi.object({
-      teacher_id: Joi.number()
-        .required()
-        .external(async (value) => {
-          const teacher = await Teacher.findOne({
-            where: { id: value },
-          });
-          if (!teacher) {
-            throw new Joi.ValidationError(
-              'any.teacher-not-found',
-              [
-                {
-                  message: 'teacher not found',
-                  path: ['teacher_id'],
-                  type: 'any.teacher-not-found',
-                  context: {
-                    key: 'teacher_id',
-                    label: 'teacher_id',
-                    value,
-                  },
-                },
-              ],
-              value,
-            );
-          }
-        }),
-      classroom_id: Joi.number()
-        .required()
-        .external(async (value) => {
-          const classroom = await Classroom.findOne({
-            where: { id: value },
-          });
-          if (!classroom) {
-            throw new Joi.ValidationError(
-              'any.classroom-not-found',
-              [
-                {
-                  message: 'classroom not found',
-                  path: ['classroom_id'],
-                  type: 'any.classroom-not-found',
-                  context: {
-                    key: 'classroom_id',
-                    label: 'classroom_id',
-                    value,
-                  },
-                },
-              ],
-              value,
-            );
-          }
-        }),
-      date: Joi.date().required(),
-      // day: Joi.number().required(),
-      duration: Joi.number().required(),
-      start_time: Joi.string().required(),
-      end_time: Joi.string().required(),
-    }),
-  ),
+  // course_schedule: Joi.array().items(
+  //   Joi.object({
+  //     teacher_id: Joi.number()
+  //       .required()
+  //       .external(async (value) => {
+  //         const teacher = await Teacher.findOne({
+  //           where: { id: value },
+  //         });
+  //         if (!teacher) {
+  //           throw new Joi.ValidationError(
+  //             'any.teacher-not-found',
+  //             [
+  //               {
+  //                 message: 'teacher not found',
+  //                 path: ['teacher_id'],
+  //                 type: 'any.teacher-not-found',
+  //                 context: {
+  //                   key: 'teacher_id',
+  //                   label: 'teacher_id',
+  //                   value,
+  //                 },
+  //               },
+  //             ],
+  //             value,
+  //           );
+  //         }
+  //       }),
+  //     classroom_id: Joi.number()
+  //       .required()
+  //       .external(async (value) => {
+  //         const classroom = await Classroom.findOne({
+  //           where: { id: value },
+  //         });
+  //         if (!classroom) {
+  //           throw new Joi.ValidationError(
+  //             'any.classroom-not-found',
+  //             [
+  //               {
+  //                 message: 'classroom not found',
+  //                 path: ['classroom_id'],
+  //                 type: 'any.classroom-not-found',
+  //                 context: {
+  //                   key: 'classroom_id',
+  //                   label: 'classroom_id',
+  //                   value,
+  //                 },
+  //               },
+  //             ],
+  //             value,
+  //           );
+  //         }
+  //       }),
+  //     date: Joi.date().required(),
+  //     duration: Joi.number().required(),
+  //     start_time: Joi.string().required(),
+  //     end_time: Joi.string().required(),
+  //   }),
+  // ),
 }).options({ abortEarly: false });

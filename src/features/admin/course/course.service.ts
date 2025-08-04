@@ -26,39 +26,43 @@ export class CourseService {
   async create(createCourseDto: CreateCourseDto) {
     const transaction = await this.sequelize.transaction();
     try {
-      const { course_schedule, ...courseData } = createCourseDto;
-      const course = await this.courseModel.create(courseData, { transaction });
+      // const { course_schedule, ...courseData } = createCourseDto;
+      // const course = await this.courseModel.create(courseData, { transaction });
 
-      const defaultStatus = CourseScheduleStatusEnum.SCHEDULED;
-      const defaultStatusName = getCourseScheduleStatusEnumLabel(defaultStatus);
+      // const defaultStatus = CourseScheduleStatusEnum.SCHEDULED;
+      // const defaultStatusName = getCourseScheduleStatusEnumLabel(defaultStatus);
 
-      for (const schedule of course_schedule) {
-        const date = new Date(schedule.date);
+      // for (const schedule of course_schedule) {
+      //   const date = new Date(schedule.date);
 
-        const [startHour, startMin] = schedule.start_time
-          .split(':')
-          .map(Number);
-        const [endHour, endMin] = schedule.end_time.split(':').map(Number);
+      //   const [startHour, startMin] = schedule.start_time
+      //     .split(':')
+      //     .map(Number);
+      //   const [endHour, endMin] = schedule.end_time.split(':').map(Number);
 
-        const dateStart = new Date(schedule.date);
-        dateStart.setHours(startHour, startMin, 0, 0); // waktu lokal
+      //   const dateStart = new Date(schedule.date);
+      //   dateStart.setHours(startHour, startMin, 0, 0);
 
-        const dateEnd = new Date(schedule.date);
-        dateEnd.setHours(endHour, endMin, 0, 0); // waktu lokal
-        const day = new Date(schedule.date).getDay(); // 0 (Sunday) to 6 (Saturday)
-        await this.courseScheduleModel.create(
-          {
-            ...schedule,
-            course_id: course.id,
-            status: defaultStatus,
-            status_name: defaultStatusName,
-            date_start: dateStart,
-            date_end: dateEnd,
-            day,
-          },
-          { transaction },
-        );
-      }
+      //   const dateEnd = new Date(schedule.date);
+      //   dateEnd.setHours(endHour, endMin, 0, 0);
+      //   const day = new Date(schedule.date).getDay();
+      //   await this.courseScheduleModel.create(
+      //     {
+      //       ...schedule,
+      //       course_id: course.id,
+      //       status: defaultStatus,
+      //       status_name: defaultStatusName,
+      //       date_start: dateStart,
+      //       date_end: dateEnd,
+      //       day,
+      //     },
+      //     { transaction },
+      //   );
+      // }
+      const course = await this.courseModel.create(
+        { ...createCourseDto },
+        { transaction },
+      );
       await transaction.commit();
       return this.response.success(course, 201, 'Successfully create course');
     } catch (error) {
@@ -69,45 +73,37 @@ export class CourseService {
   }
 
   async findAll(query: any) {
-    const { start_date, end_date } = query;
-    const start = start_date ? new Date(start_date) : undefined;
-    const end = end_date ? new Date(end_date) : undefined;
-
-    if (end) {
-      end.setHours(23, 59, 59, 999);
-    }
-
     const { count, data } = await new QueryBuilderHelper(
       this.courseModel,
       query,
     )
       .load(
-        {
-          association: 'course_schedule',
-          where:
-            start && end
-              ? {
-                  date_start: {
-                    [Op.between]: [start, end],
-                  },
-                }
-              : undefined,
-          required: !!(start && end),
-          include: [
-            {
-              association: 'teacher',
-              include: [
-                {
-                  association: 'staff',
-                  include: [{ association: 'user' }],
-                },
-              ],
-            },
-            { association: 'classroom' },
-            { association: 'attendance' },
-            { association: 'course_reschedule' },
-          ],
-        },
+        // {
+        //   association: 'course_schedule',
+        //   where:
+        //     start && end
+        //       ? {
+        //           date_start: {
+        //             [Op.between]: [start, end],
+        //           },
+        //         }
+        //       : undefined,
+        //   required: !!(start && end),
+        //   include: [
+        //     {
+        //       association: 'teacher',
+        //       include: [
+        //         {
+        //           association: 'staff',
+        //           include: [{ association: 'user' }],
+        //         },
+        //       ],
+        //     },
+        //     { association: 'classroom' },
+        //     { association: 'attendance' },
+        //     { association: 'course_reschedule' },
+        //   ],
+        // },
         'course_package',
         'instrument',
         'music_genre',
@@ -131,23 +127,23 @@ export class CourseService {
       const course = await this.courseModel.findOne({
         where: { id },
         include: [
-          {
-            association: 'course_schedule',
-            include: [
-              {
-                association: 'teacher',
-                include: [
-                  {
-                    association: 'staff',
-                    include: [{ association: 'user' }],
-                  },
-                ],
-              },
-              { association: 'classroom' },
-              { association: 'attendance' },
-              { association: 'course_reschedule' },
-            ],
-          },
+          // {
+          //   association: 'course_schedule',
+          //   include: [
+          //     {
+          //       association: 'teacher',
+          //       include: [
+          //         {
+          //           association: 'staff',
+          //           include: [{ association: 'user' }],
+          //         },
+          //       ],
+          //     },
+          //     { association: 'classroom' },
+          //     { association: 'attendance' },
+          //     { association: 'course_reschedule' },
+          //   ],
+          // },
           { association: 'course_package' },
           { association: 'instrument' },
           { association: 'music_genre' },
