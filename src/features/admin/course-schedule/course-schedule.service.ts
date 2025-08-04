@@ -86,6 +86,9 @@ export class CourseScheduleService {
               association: 'student',
               include: [{ association: 'user' }],
             },
+            { association: 'branch' },
+            { association: 'music_genre' },
+            { association: 'instrument' },
           ],
         },
         {
@@ -97,6 +100,7 @@ export class CourseScheduleService {
             },
           ],
         },
+        { association: 'classroom' },
         { association: 'attendance' },
         { association: 'course_reschedule' },
       )
@@ -125,6 +129,9 @@ export class CourseScheduleService {
                 association: 'student',
                 include: [{ association: 'user' }],
               },
+              { association: 'branch' },
+              { association: 'music_genre' },
+              { association: 'instrument' },
             ],
           },
           {
@@ -136,6 +143,7 @@ export class CourseScheduleService {
               },
             ],
           },
+          { association: 'classroom' },
           { association: 'attendance' },
           { association: 'course_reschedule' },
         ],
