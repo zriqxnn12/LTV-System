@@ -89,6 +89,7 @@ export class CourseScheduleService {
             { association: 'branch' },
             { association: 'music_genre' },
             { association: 'instrument' },
+            { association: 'course_package' },
           ],
         },
         {
@@ -132,6 +133,7 @@ export class CourseScheduleService {
               { association: 'branch' },
               { association: 'music_genre' },
               { association: 'instrument' },
+              { association: 'course_package' },
             ],
           },
           {
@@ -158,11 +160,22 @@ export class CourseScheduleService {
     }
   }
 
-  update(id: number, updateCourseScheduleDto: UpdateCourseScheduleDto) {
-    return `This action updates a #${id} courseSchedule`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} courseSchedule`;
+  async delete(id: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      await this.courseScheduleModel.destroy({
+        where: { id: id },
+        transaction,
+      });
+      await transaction.commit();
+      return this.response.success(
+        {},
+        200,
+        'Successfully delete course schedule',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to delete course schedule', 400);
+    }
   }
 }

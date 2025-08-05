@@ -46,16 +46,12 @@ export class CourseScheduleController {
     return this.courseScheduleService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateCourseScheduleDto: UpdateCourseScheduleDto,
-  ) {
-    return this.courseScheduleService.update(+id, updateCourseScheduleDto);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.courseScheduleService.remove(+id);
+  remove(
+    @Param('id', new JoiValidationParamPipe(courseScheduleIdParamSchema))
+    id: string,
+  ) {
+    return this.courseScheduleService.delete(+id);
   }
 }
