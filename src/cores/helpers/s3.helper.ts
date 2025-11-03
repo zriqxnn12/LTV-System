@@ -1,106 +1,91 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { S3 } from 'aws-sdk';
-import mime = require('mime-types');
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  ObjectCannedACL, // ⬅️ tambahkan ini
+} from '@aws-sdk/client-s3';
+import * as mime from 'mime-types';
+import * as path from 'path';
 
 @Injectable()
 export class S3Helper {
-  protected s3;
+  private s3Client: S3Client;
 
   constructor() {
-    this.s3 = new S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    this.s3Client = new S3Client({
       region: process.env.AWS_DEFAULT_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
     });
   }
 
   async uploadFile(
     file: Express.Multer.File | Buffer,
     fileName: string,
-    acl: string,
-    customName = null,
+    acl: ObjectCannedACL = 'private', // ⬅️ tambahkan type ACL di sini juga
+    customName: string | null = null,
   ) {
-    const date = new Date();
+    try {
+      const date = new Date();
+      let extension: string;
+      let key: string;
+      let body: Buffer;
 
-    let params: { Bucket: string; Key: string; Body: any; ACL: string };
-    let extension;
-    if (Buffer.isBuffer(file)) {
-      params = {
-        Bucket: process.env.AWS_BUCKET,
-        Key:
-          fileName +
-          '-' +
-          date.toISOString().slice(0, 10) +
-          '-' +
-          date.getHours() +
-          '-' +
-          date.getMinutes() +
-          '-' +
-          date.getSeconds() +
-          '-' +
-          date.getMilliseconds() +
-          '.webp',
-        Body: file,
-        ACL: acl,
+      if (Buffer.isBuffer(file)) {
+        extension = 'webp';
+        key = `${fileName}-${date.toISOString().slice(0, 10)}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-${date.getMilliseconds()}.webp`;
+        body = file;
+      } else {
+        extension = mime.extension(file.mimetype) || 'bin';
+        key = `${fileName}-${date.toISOString().slice(0, 10)}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}-${date.getMilliseconds()}.${extension}`;
+        body = file.buffer;
+      }
+
+      if (customName !== null) {
+        key = `${fileName}-${customName}.${extension}`;
+      }
+
+      const params = {
+        Bucket: process.env.AWS_BUCKET!,
+        Key: key,
+        Body: body,
+        ACL: acl, // ✅ sekarang tipe-nya sesuai enum ObjectCannedACL
+        ContentType: mime.lookup(extension) || 'application/octet-stream',
       };
 
-      extension = 'webp';
-    } else {
-      params = {
-        Bucket: process.env.AWS_BUCKET,
-        Key:
-          fileName +
-          '-' +
-          date.toISOString().slice(0, 10) +
-          '-' +
-          date.getHours() +
-          '-' +
-          date.getMinutes() +
-          '-' +
-          date.getSeconds() +
-          '-' +
-          date.getMilliseconds() +
-          '.' +
-          mime.extension(file.mimetype),
-        Body: file.buffer,
-        ACL: acl,
+      const command = new PutObjectCommand(params);
+      const result = await this.s3Client.send(command);
+
+      Logger.log(`✅ File uploaded: ${key}`);
+      return {
+        key,
+        location: `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/${key}`,
+        result,
       };
-
-      const path = require('path');
-      extension = path.extname(file.originalname).substring(1);
+    } catch (error) {
+      Logger.error('❌ Upload failed:', error);
+      throw error;
     }
-
-    if (customName !== null) {
-      params.Key = fileName + '-' + customName + '.' + extension;
-    }
-
-    return this.s3
-      .upload(params, (err, data) => {
-        if (err) {
-          Logger.error(err);
-          throw new Error(err.message);
-        }
-        return data;
-      })
-      .promise()
-      .then((data) => data);
   }
 
   async deleteFile(filePath: string) {
-    const params = {
-      Bucket: process.env.AWS_BUCKET,
-      Key: filePath,
-    };
+    try {
+      const params = {
+        Bucket: process.env.AWS_BUCKET!,
+        Key: filePath,
+      };
 
-    return this.s3
-      .deleteObject(params, (err, data) => {
-        if (err) {
-          Logger.error(err);
-          throw new Error(err.message);
-        }
-        return data;
-      })
-      .promise()
-      .then((data) => data);
+      const command = new DeleteObjectCommand(params);
+      const result = await this.s3Client.send(command);
+
+      Logger.log(`🗑️ File deleted: ${filePath}`);
+      return result;
+    } catch (error) {
+      Logger.error('❌ Delete failed:', error);
+      throw error;
+    }
   }
 }

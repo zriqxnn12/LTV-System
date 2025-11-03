@@ -56,7 +56,7 @@ export class SharpHelper {
       md5Hash,
     );
 
-    const imageUrl = new URL(originalFile.Location);
+    const imageUrl = new URL(originalFile.location);
     return { file_path: imageUrl.pathname.substring(1), url: imageUrl.href };
   }
 

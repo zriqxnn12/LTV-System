@@ -39,7 +39,7 @@ export class AttendanceService {
       const attendance = await this.attendanceModel.create(
         {
           ...createAttendanceDto,
-          file_path: uploadImage.file_path,
+          file_path: uploadImage.key,
         },
         { transaction },
       );

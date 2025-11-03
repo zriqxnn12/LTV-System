@@ -71,7 +71,7 @@ export class EventParticipantPublicService {
 
       await eventParticipant.update(
         {
-          file_path: uploadedImage.Key,
+          file_path: uploadedImage.key,
           status: EventParticipantStatusEnum.PAYMENT_REVIEW,
         },
         { transaction: transaction },
