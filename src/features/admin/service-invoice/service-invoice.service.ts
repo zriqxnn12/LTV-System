@@ -160,7 +160,7 @@ export class ServiceInvoiceService {
       const invoice = await this.serviceInvoiceModel.findOne({
         where: {
           id: invoiceId,
-          status: ServiceInvoiceStatus.CANCELLED,
+          status: ServiceInvoiceStatus.PAYMENT_APPROVAL,
         },
         include: [
           {

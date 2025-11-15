@@ -51,7 +51,7 @@ export class CourseReschedulePublicService {
 
       await courseSchedule.update(
         {
-          status: CourseScheduleStatusEnum.RESCHEDULED,
+          status: CourseScheduleStatusEnum.WAITING_REQUEST,
           date,
           date_start: dateStart,
           date_end: dateEnd,

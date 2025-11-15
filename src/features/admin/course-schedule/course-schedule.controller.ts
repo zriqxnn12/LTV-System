@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { CourseScheduleService } from './course-schedule.service';
 import { CreateCourseScheduleDto } from '../../../models/course-schedules/dto/create-course-schedule.dto';
@@ -53,5 +54,14 @@ export class CourseScheduleController {
     id: string,
   ) {
     return this.courseScheduleService.delete(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id/reschedule')
+  updateStatusToRescheduled(
+    @Param('id', new JoiValidationParamPipe(courseScheduleIdParamSchema))
+    id: number,
+  ) {
+    return this.courseScheduleService.updateStatusToRescheduled(+id);
   }
 }

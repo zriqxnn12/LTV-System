@@ -10,6 +10,7 @@ import { Op, where } from 'sequelize';
 import CourseScheduleStatusEnum, {
   getCourseScheduleStatusEnumLabel,
 } from 'src/models/course-schedules/enums/course-schedule-status.enum';
+import { CourseReschedule } from 'src/models/course-reschedules/entities/course-reschedule.entity';
 
 @Injectable()
 export class CourseScheduleService {
@@ -176,6 +177,41 @@ export class CourseScheduleService {
     } catch (error) {
       await transaction.rollback();
       return this.response.fail('Failed to delete course schedule', 400);
+    }
+  }
+
+  async updateStatusToRescheduled(scheduleId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const schedule = await this.courseScheduleModel.findOne({
+        where: {
+          id: scheduleId,
+          status: CourseScheduleStatusEnum.WAITING_REQUEST,
+        },
+        include: [
+          {
+            model: CourseReschedule,
+          },
+        ],
+        transaction,
+      });
+
+      await this.courseScheduleModel.update(
+        { status: CourseScheduleStatusEnum.RESCHEDULED },
+        {
+          where: { id: scheduleId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(
+        null,
+        200,
+        'Course schedule status successfully updated to Rescheduled',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
     }
   }
 }
