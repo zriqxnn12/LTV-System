@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateCourseScheduleDto } from '../../../models/course-schedules/dto/create-course-schedule.dto';
 import { UpdateCourseScheduleDto } from '../../../models/course-schedules/dto/update-course-schedule.dto';
 import { ResponseHelper } from 'src/cores/helpers/response.helper';
@@ -6,7 +11,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 import { CourseSchedule } from 'src/models/course-schedules/entities/course-schedule.entity';
 import { QueryBuilderHelper } from 'src/cores/helpers/query-builder.helper';
-import { Op, where } from 'sequelize';
+import { Op, Transaction, where } from 'sequelize';
 import CourseScheduleStatusEnum, {
   getCourseScheduleStatusEnumLabel,
 } from 'src/models/course-schedules/enums/course-schedule-status.enum';
@@ -24,19 +29,39 @@ export class CourseScheduleService {
   async create(createCourseScheduleDto: CreateCourseScheduleDto) {
     const transaction = await this.sequelize.transaction();
     try {
-      const { date, start_time, duration, ...rest } = createCourseScheduleDto;
+      const { date, start_time, duration, teacher_id } =
+        createCourseScheduleDto;
 
       const dateStart = new Date(`${date}T${start_time}:00.000Z`);
       const dateEnd = new Date(dateStart.getTime() + duration * 60000);
       const day = dateStart.getUTCDay();
 
+      // Cek apakah ada jadwal guru yang bentrok
+      const existingSchedule = await this.courseScheduleModel.findOne({
+        where: {
+          teacher_id,
+          [Op.and]: [
+            { date_start: { [Op.lt]: dateEnd } },
+            { date_end: { [Op.gt]: dateStart } },
+          ],
+        },
+      });
+
+      if (existingSchedule) {
+        // await transaction.rollback();
+        throw new HttpException(
+          'Schedule conflict: the teacher already has a class at this time.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
       const schedule = await this.courseScheduleModel.create(
         {
-          ...rest,
+          ...createCourseScheduleDto,
           date,
           duration,
-          start_time,
-          end_time: createCourseScheduleDto.end_time,
+          // start_time,
+          // end_time: createCourseScheduleDto.end_time,
           date_start: dateStart,
           date_end: dateEnd,
           day,
@@ -58,8 +83,12 @@ export class CourseScheduleService {
       );
     } catch (error) {
       await transaction.rollback();
-      console.error('Error creating course schedule:', error);
-      return this.response.fail('Failed to create course schedule', 400);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Failed to create course schedule',
+      );
     }
   }
 
