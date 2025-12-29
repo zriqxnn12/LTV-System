@@ -40,7 +40,7 @@ export class SharpHelper {
           await s3Helper.uploadFile(
             value,
             option.path,
-            'public-read',
+            // 'public-read',
             fileName,
           );
         });
@@ -52,7 +52,7 @@ export class SharpHelper {
     const originalFile = await s3Helper.uploadFile(
       convertOriginalToWebp,
       option.path,
-      'public-read',
+      // 'public-read',
       md5Hash,
     );
 

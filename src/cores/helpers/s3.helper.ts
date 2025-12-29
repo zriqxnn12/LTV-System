@@ -3,7 +3,7 @@ import {
   S3Client,
   PutObjectCommand,
   DeleteObjectCommand,
-  ObjectCannedACL, // ⬅️ tambahkan ini
+  ObjectCannedACL,
 } from '@aws-sdk/client-s3';
 import * as mime from 'mime-types';
 import * as path from 'path';
@@ -25,7 +25,7 @@ export class S3Helper {
   async uploadFile(
     file: Express.Multer.File | Buffer,
     fileName: string,
-    acl: ObjectCannedACL = 'private', // ⬅️ tambahkan type ACL di sini juga
+    // acl: ObjectCannedACL = 'private',
     customName: string | null = null,
   ) {
     try {
@@ -52,7 +52,7 @@ export class S3Helper {
         Bucket: process.env.AWS_BUCKET!,
         Key: key,
         Body: body,
-        ACL: acl, // ✅ sekarang tipe-nya sesuai enum ObjectCannedACL
+        // ACL: acl,
         ContentType: mime.lookup(extension) || 'application/octet-stream',
       };
 

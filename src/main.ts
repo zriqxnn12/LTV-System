@@ -4,9 +4,13 @@ import { AppModule } from './app.module';
 import { Handler } from './cores/exceptions/handler.exception';
 import { Response } from './cores/interceptions/response.interception';
 import express = require('express');
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import path = require('path');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
 
   app.use(express.json());
@@ -19,6 +23,10 @@ async function bootstrap() {
       callback(null, true);
     },
   });
+
+  // app.useStaticAssets(join(process.cwd(), 'uploads'), {
+  //   prefix: '/uploads',
+  // });
 
   await app.listen(3000);
 }
