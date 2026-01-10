@@ -243,4 +243,39 @@ export class CourseScheduleService {
       return this.response.fail('Failed to update status', 400);
     }
   }
+
+  async updateStatusToRescheduleRejected(scheduleId: number) {
+    const transaction = await this.sequelize.transaction();
+    try {
+      const schedule = await this.courseScheduleModel.findOne({
+        where: {
+          id: scheduleId,
+          status: CourseScheduleStatusEnum.WAITING_REQUEST,
+        },
+        include: [
+          {
+            model: CourseReschedule,
+          },
+        ],
+        transaction,
+      });
+
+      await this.courseScheduleModel.update(
+        { status: CourseScheduleStatusEnum.RESCHEDULE_REJECTED },
+        {
+          where: { id: scheduleId },
+          transaction,
+        },
+      );
+      await transaction.commit();
+      return this.response.success(
+        null,
+        200,
+        'Course schedule successfully updated to Reschedule Rejected',
+      );
+    } catch (error) {
+      await transaction.rollback();
+      return this.response.fail('Failed to update status', 400);
+    }
+  }
 }

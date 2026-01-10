@@ -5,6 +5,7 @@ enum CourseScheduleStatusEnum {
   COMPLETED = 3,
   ABSENT = 4,
   WAITING_REQUEST = 5,
+  RESCHEDULE_REJECTED = 6,
 }
 
 export const getCourseScheduleStatusEnumLabel = (
@@ -23,6 +24,8 @@ export const getCourseScheduleStatusEnumLabel = (
       return 'Absent';
     case CourseScheduleStatusEnum.WAITING_REQUEST:
       return 'Waiting for request';
+    case CourseScheduleStatusEnum.RESCHEDULE_REJECTED:
+      return 'Reschedule Rejected';
     default:
       return 'Unknown';
   }

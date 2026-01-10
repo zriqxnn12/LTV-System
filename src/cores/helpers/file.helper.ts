@@ -5,7 +5,7 @@ import * as mime from 'mime-types';
 
 @Injectable()
 export class FileHelper {
-  private uploadPath = path.join(process.cwd(), 'uploads', 'images');
+  private uploadPath = path.join(process.cwd(), 'uploads');
 
   constructor() {
     if (!fs.existsSync(this.uploadPath)) {
@@ -45,8 +45,8 @@ export class FileHelper {
       fs.writeFileSync(fullPath, body);
 
       return {
-        filename: `${subPath}-${finalName}`,
-        path: `/uploads/images/${subPath}/${finalName}`,
+        filename: `${subPath}/${finalName}`,
+        path: `/uploads/${subPath}/${finalName}`,
         fullPath,
       };
     } catch (error) {

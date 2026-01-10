@@ -64,4 +64,13 @@ export class CourseScheduleController {
   ) {
     return this.courseScheduleService.updateStatusToRescheduled(+id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id/reject')
+  updateStatusToRescheduleRejected(
+    @Param('id', new JoiValidationParamPipe(courseScheduleIdParamSchema))
+    id: number,
+  ) {
+    return this.courseScheduleService.updateStatusToRescheduleRejected(+id);
+  }
 }
